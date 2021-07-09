@@ -9,4 +9,5 @@ Realizado por:
 * DBA (Persistencia)	Nelson Ricardo Hurtado Fuentes
 * FrontEnd	Walter González Rincón
 * Scrum Master Y gestor de proyectos	Deisy Katherine Pineda Araque
-* Testing Nelson Ricardo Hurtado Fuentes
+* Testing Carlos Andres Gutiérrez Cruz
+
