@@ -1,0 +1,23 @@
+.formEdit{
+    max-width: 500px;
+    margin: auto;   
+    padding: 10px;         
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;    
+    background-color: #bdc3c7 ;
+    
+    
+}
+.fotoPerfil{
+    max-width: 400px;
+    align-items: center;
+    margin: auto;
+    margin-top: 20px;
+       
+    
+         
+}
+.imgPerfil{
+    max-width: 100px;
+}

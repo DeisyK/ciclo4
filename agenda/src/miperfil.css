@@ -1,0 +1,25 @@
+.formPefil{
+    max-width: 500px;
+    margin: auto;
+    margin-top: 20px;
+    padding: 10px;         
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 500;
+    background-color: #bdc3c7 ;
+    
+    
+}
+.fotoPerfil{
+    max-width: 400px;
+    align-items: center;
+    margin: auto;
+    margin-top: 20px;
+    
+    
+         
+}
+.imgPerfil{
+    max-width: 100px;
+}

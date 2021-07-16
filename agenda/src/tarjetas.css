@@ -1,0 +1,13 @@
+.tarjeta{
+    padding: 10px;
+    margin: auto; 
+    background-color: #bdc3c7 ;
+    width: 400px;  
+    align-items: center;
+    
+
+}
+.tarjetaPersonal{
+    padding: 10px;
+    background-color: #bdc3c7 ;
+}
