@@ -1,0 +1,15 @@
+.login{
+    max-width: 600px;
+    margin: auto;
+    margin-top: 20px;
+    padding: 10px;
+    
+    
+}
+.formulario{
+    height: 400px;    
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    background-color: #bdc3c7 ;
+}
