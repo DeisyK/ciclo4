@@ -1,9 +1,13 @@
-# ciclo 4 Mision Tic
-## BWM (BASIC WEB NOTE)
+# BASIC WEB NOTE (BWN)
+## UNIVERSIDAD TECNOLOGICA DE PEREIRA
+## MISIONTIC2022
+### CICLO 4
+### GRUPO WEB 3
 
-### Realizado Por:
-* Hector Jair Fonseca Pinto -> Scrum Master y Gestor de proyecto
-* Walter Gonzalez Rincon -> FrontEnd
-* Nelson Ricardo Hurtado Fuentes -> DBA (Persistencia)
-* Carlos Andrés Gutiérrez Cruz -> Testing
-* Deisy Katherine Pineda Araque -> BackEnd
+Realizado por:
+* BackEnd	Héctor Jair Fonseca Pinto
+* DBA (Persistencia)	Nelson Ricardo Hurtado Fuentes
+* FrontEnd	Walter González Rincón
+* Scrum Master Y gestor de proyectos	Deisy Katherine Pineda Araque
+* Testing Carlos Andres Gutiérrez Cruz
+
