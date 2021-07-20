@@ -2,6 +2,12 @@ import React from 'react';
 import { Button, Form, FormGroup, Label, Input, Card } from 'reactstrap';
 import './login.css'
 const Example = (props) => {
+
+  const loginUser=(cb)=>{
+    cb(true)  
+  }
+
+
   return (
       <Card className='login'>
           
@@ -24,7 +30,9 @@ const Example = (props) => {
           Recordarme
         </Label>
       </FormGroup>
-      <Button  href="/Miperfil">Entrar</Button>
+      <Button onclick={()=>{
+        loginUser(props.setloginUser) 
+      }} href="/Miperfil">Entrar</Button>
       <Button href="/">← Volver</Button>
       <a href="/Registro">Registrarse</a>
     </Form>

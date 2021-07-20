@@ -65,6 +65,7 @@ const Registro = (props) => {
         />
       </FormGroup>
       <Button>Registrarse</Button>
+      
       <Button href="/login">← Volver</Button>
     </Form>
   );
