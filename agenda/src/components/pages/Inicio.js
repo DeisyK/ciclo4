@@ -1,6 +1,6 @@
 import React, {useState,useEffect} from "react";
 import { Card, CardGroup} from "react-bootstrap";
-import './tarjetas.css'
+import '../css/tarjetas.css'
 
 
 function Inicio() {

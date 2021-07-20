@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
-import "./registro.css"
+import "../css/registro.css"
 
 const Registro = (props) => {
   return (
