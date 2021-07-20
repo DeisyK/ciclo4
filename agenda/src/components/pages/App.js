@@ -10,7 +10,7 @@ import Categorias from "./Categorias";
 
 import PrivateRoute from "./PrivateRoute";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Navbarcomp from "./components/NavbarComp";
+import Navbarcomp from "../NavbarComp";
 import Inicio from "./Inicio";
 
 

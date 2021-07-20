@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Form, FormGroup, Label, Input, Card } from 'reactstrap';
-import './recuperarPw.css'
+import '../css/recuperarPw.css'
 const RecuperarPw = (props) => {
   return (
       <Card className='password'>

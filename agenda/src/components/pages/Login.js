@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Form, FormGroup, Label, Input, Card } from 'reactstrap';
-import './login.css'
+import '../css/login.css'
 const Example = (props) => {
   return (
       <Card className='login'>
