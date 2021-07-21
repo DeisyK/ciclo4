@@ -9,6 +9,7 @@ const Example = (props) => {
 
 
 const validar = ()=>{
+  props.setLoginUser(true);
  
 }
   return (
