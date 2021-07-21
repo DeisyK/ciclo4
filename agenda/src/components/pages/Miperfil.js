@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 import "../css/miperfil.css"
 import {
   Form,
@@ -74,8 +75,9 @@ const Miperfil = (props) => {
           placeholder="número telefónico"
           disabled
         />
-      </FormGroup>
-      <Button href="/EditarPerfil">Editar perfil</Button>
+      </FormGroup>      
+      <Link to="/EditarPerfil"><Button>Editar perfil</Button></Link>
+      
           </div>
     </Form>
   );

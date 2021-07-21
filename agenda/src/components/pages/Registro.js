@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import "../css/registro.css"
 
@@ -63,10 +64,11 @@ const Registro = (props) => {
           id="exampleEmail"
           placeholder="Ingresa tu E-mail"
         />
-      </FormGroup>
-      <Button>Registrarse</Button>
+      </FormGroup>    
       
-      <Button href="/login">← Volver</Button>
+      <Link to="#"><Button>Registrarse</Button></Link>       
+      <Link to="/login"><Button>← Volver</Button></Link>      
+      
     </Form>
   );
 }

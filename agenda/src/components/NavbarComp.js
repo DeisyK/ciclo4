@@ -1,5 +1,6 @@
 import React from 'react'
 import {Navbar,Nav,Container} from 'react-bootstrap'
+import { Link } from 'react-router-dom';
 
 const Navbarcomp= (props)=>{
     
@@ -27,9 +28,10 @@ const Navbarcomp= (props)=>{
                         
                             <Nav className="me-auto">
                                 {props.loginUser?
-                            <Nav.Link href="/Categorias">Categorías</Nav.Link>:null}
+                                <Link to="/Categorias">Categorías</Link>:null}                      
+                 
                             {props.loginUser?
-                            <Nav.Link href="/Contactos">Contactos</Nav.Link>:null
+                            <Nav.Link to="/Contactos">Contactos</Nav.Link>:null
                             }
                             </Nav>
                             <Nav>                           
