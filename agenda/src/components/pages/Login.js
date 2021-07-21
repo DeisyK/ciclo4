@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Button, Form, FormGroup, Label, Input, Card } from 'reactstrap';
-import './login.css'
+import '../css/login.css'
+
 const Example = (props) => {
-
-  const loginUser=(cb)=>{
-    cb(true)  
-  }
+  const [errorEmail, setErrorEmail]= useState(false)
+  const [errorPassword, setErrorPassword ]= useState(false)
 
 
+const validar = ()=>{
+ 
+}
   return (
       <Card className='login'>
           
@@ -16,6 +19,7 @@ const Example = (props) => {
       <FormGroup>        
         <Label for="exampleEmail">Email</Label>
         <Input type="email" name="email" id="exampleEmail" placeholder="Ingresa tu E-mail" />
+      {errorEmail ? <p>Por favor ingrese un email valido</p>:null}
       </FormGroup>
       <FormGroup>
         <Label for="examplePassword">Password</Label>
@@ -30,11 +34,13 @@ const Example = (props) => {
           Recordarme
         </Label>
       </FormGroup>
-      <Button onclick={()=>{
-        loginUser(props.setloginUser) 
-      }} href="/Miperfil">Entrar</Button>
-      <Button href="/">← Volver</Button>
-      <a href="/Registro">Registrarse</a>
+      <Link  to="/Miperfil" onClick={()=>{
+        validar()
+       
+
+      }}><Button >Entrar</Button></Link>
+      <Link to="/"><Button >← Volver</Button></Link>
+      <Link to="/Registro">Registrarse</Link>
     </Form>
       </Card>
   );

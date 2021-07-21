@@ -1,5 +1,5 @@
 import React from "react";
-import "./miperfil.css"
+import "../css/EditarPerfil.css"
 import {
   Form,
   FormGroup,
@@ -7,12 +7,11 @@ import {
   Input,  
   Card,
   CardImg,
-  CardBody,
-  CardTitle, 
+  CardBody,  
   Button,
 } from "reactstrap";
 
-const Miperfil = (props) => {
+const EditarPerfil = (props) => {
   return (
     <Form >
       <div>
@@ -23,20 +22,25 @@ const Miperfil = (props) => {
                 src="https://i.ibb.co/DkvT9cS/img-Perfil.png"
                 alt="Imagen perfil"
             />
-            <CardBody >
-                <CardTitle tag="h6">Nombre de usuario</CardTitle>               
-                
+            <CardBody >               
+               
+                <Label for="exampleFile">Subir Foto</Label>
+                <Input type="file" name="file" id="exampleFile"/>
                
             </CardBody>
             </Card>
       </div>
       
 
-      <div className='formPefil'>
+      <div className='formEdit'>
           
 
-      <FormGroup>
-        <h6>Información de perfil</h6>
+      <FormGroup>      
+
+        <FormGroup>
+          <Label for="exampleUrl">Nombre</Label>
+          <Input type="text" placeholder="Nombre"  />
+        </FormGroup>
 
         <FormGroup>
           <Label for="exampleDate">Fecha de nacimiento</Label>
@@ -45,13 +49,13 @@ const Miperfil = (props) => {
             name="date"
             id="exampleDate"
             placeholder="date placeholder"
-            disabled
+            
             />
         </FormGroup>
 
         <FormGroup>
           <Label for="exampleUrl">País</Label>
-          <Input type="text" placeholder="País" disabled />
+          <Input type="text" placeholder="País"  />
         </FormGroup>
       </FormGroup>
       <FormGroup>
@@ -61,7 +65,7 @@ const Miperfil = (props) => {
           name="email"
           id="exampleEmail"
           placeholder="E-mail"
-          disabled
+          
           />
       </FormGroup>
 
@@ -72,13 +76,14 @@ const Miperfil = (props) => {
           name="number"
           id="exampleNumber"
           placeholder="número telefónico"
-          disabled
-        />
+          
+        /><br></br>
       </FormGroup>
-      <Button href="/EditarPerfil">Editar perfil</Button>
+      <Button href="#guardar">Guardar</Button><br></br>
+      <Button  href="/Miperfil">← Volver</Button>
           </div>
     </Form>
   );
 };
 
-export default Miperfil;
+export default EditarPerfil;

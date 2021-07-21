@@ -1,8 +1,8 @@
-import React, {Component} from 'react'
+import React from 'react'
 import {Navbar,Nav,Container} from 'react-bootstrap'
 
-export default class Navbarcomp extends Component{
-    render(){
+const Navbarcomp= (props)=>{
+    
         return(
            <div>           
              
@@ -26,13 +26,20 @@ export default class Navbarcomp extends Component{
                         <Navbar.Collapse id="responsive-navbar-nav">
                         
                             <Nav className="me-auto">
-                            <Nav.Link href="/Categorias">Categorías</Nav.Link>
-                            <Nav.Link href="/Contactos">Contactos</Nav.Link>
-                           
+                                {props.loginUser?
+                            <Nav.Link href="/Categorias">Categorías</Nav.Link>:null}
+                            {props.loginUser?
+                            <Nav.Link href="/Contactos">Contactos</Nav.Link>:null
+                            }
                             </Nav>
                             <Nav>                           
                             
-                            <Nav.Link href="/login">Mi Cuenta</Nav.Link>
+                            {
+                                props.loginUser ? <Nav.Link href="/" onClick={()=>{
+                                    props.setLoginUser(false)
+                                }}>Salir</Nav.Link>:<Nav.Link href="/login">Mi cuenta</Nav.Link>
+                            }
+                            
                            
                             </Nav>
                         </Navbar.Collapse>
@@ -42,4 +49,4 @@ export default class Navbarcomp extends Component{
            </div> 
         )
     }
-}
+export default Navbarcomp

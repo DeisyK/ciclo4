@@ -10,7 +10,7 @@ import Categorias from "./Categorias";
 
 import PrivateRoute from "./PrivateRoute";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Navbarcomp from "./components/NavbarComp";
+import Navbarcomp from "../NavbarComp";
 import Inicio from "./Inicio";
 
 
@@ -32,26 +32,23 @@ const Home = () => (
 
 
 export default function App() {
-
-    const [loginUser,setloginUser]=useState(false)
-
+    const [loginUser, setLoginUser] = useState(false)
  return (  
      
  <div> 
      <nav >
          
         <div>
-            <Navbarcomp 
-            loginUser = {loginUser}
-            setloginUser = {setloginUser}
-            />
+            <Navbarcomp
+            loginUser={loginUser}
+            setLoginUser={setLoginUser}/>
         </div>
      </nav>
     <Switch>
         <Route exact path="/"><Home /></Route>        
-        <Route path="/login"><Login
-        loginUser = {loginUser}
-        setloginUser = {setloginUser}
+        <Route path="/login"><Login 
+        loginUser={loginUser}
+        setLoginUser={setLoginUser}
         /></Route>
         <Route path="/RecuperarPw"><RecuperarPw /></Route>
         <Route path="/Registro"><Registro /></Route>
