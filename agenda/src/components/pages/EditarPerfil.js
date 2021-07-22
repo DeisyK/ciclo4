@@ -1,5 +1,6 @@
 import React from "react";
 import "../css/EditarPerfil.css"
+import { Link } from 'react-router-dom';
 import {
   Form,
   FormGroup,
@@ -79,8 +80,9 @@ const EditarPerfil = (props) => {
           
         /><br></br>
       </FormGroup>
-      <Button href="#guardar">Guardar</Button><br></br>
-      <Button  href="/Miperfil">← Volver</Button>
+      <Link to="#guardar"><Button>Guardar</Button><br></br></Link>
+      <Link to="/Miperfil"><Button>← Volver</Button></Link>      
+      
           </div>
     </Form>
   );

@@ -9,6 +9,7 @@ const Example = (props) => {
 
 
 const validar = ()=>{
+  props.setLoginUser(true);
  
 }
   return (
@@ -25,7 +26,7 @@ const validar = ()=>{
         <Label for="examplePassword">Password</Label>
         <Input type="password" name="password" id="examplePassword" placeholder="Ingresar Contraseña" />
       </FormGroup>
-      <a   href="/RecuperarPw">Olvidaste tu contraseña</a>
+      <Link to="/Registro">Olvidaste tu contraseña</Link>     
       
      
       <FormGroup check>
