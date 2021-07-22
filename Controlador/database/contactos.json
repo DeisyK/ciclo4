@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "nombre": "",
+    "apellido": "",
+    "telefono": "",
+    "email": "",
+    "fecha_de_nacimiento": "",
+    "categoria": "",
+    "profesion": "",
+    "pais": "",
+    "usuario": 1
+  }
+]
