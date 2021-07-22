@@ -16,6 +16,7 @@ import Inicio from "./Inicio";
 
 
 
+
 const Home = () => (
  <div>
  <Inicio/>
@@ -36,6 +37,7 @@ export default function App() {
      
  <div> 
      <nav >
+         
         <div>
             <Navbarcomp
             loginUser={loginUser}
