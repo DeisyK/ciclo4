@@ -13,13 +13,13 @@ const usuarios = () => {
 
 exports.login = async (req, res, next) => {
   try {
-    const register = usuarios().filter((one) => {
-      one.email === req.body.email;
-    });
+    const users = usuarios();
+    const register = users.find((one) => one.email === req.body.email);
     if (register) {
       const isTrue = bcrypt.compareSync(req.body.password, register.password);
       if (isTrue) {
-        const token = tokenServices(register);
+        const token = tokenServices.encodeUser(register);
+        console.log(token);
         res.send({ token });
       } else {
         res.send({ message: "Revise email y contraseña" });
@@ -43,12 +43,13 @@ exports.register = async (req, res, next) => {
         message: "No puede ingresar un correo electronico que ya exista",
       });
     } else {
-      const password = generator.generate({
+      const password = "12345678";
+      /* const password = generator.generate({
         length: 10,
         numbers: true,
-      });
+      });*/
       const salt = bcrypt.genSaltSync(8);
-      console.log(password);
+
       const nuevo = {
         id: users.length + 1,
         nombre: req.body.nombre,
@@ -59,13 +60,19 @@ exports.register = async (req, res, next) => {
         email: req.body.email,
         password: bcrypt.hashSync(password, salt),
       };
+
       users = JSON.stringify([...users, nuevo]);
       fs.writeFileSync(
         path.join(__dirname, "../database/usuarios.json"),
         users
       );
-      await sendEmails.register(nuevo);
-      res.status(200);
+      const mailOk = await sendEmails.register(nuevo, password);
+      console.log(mailOk);
+      mailOk
+        ? res.status(200).send({ message: "Registro creado con exito" })
+        : res.send({
+            message: "No se pudo realizar el registro intente nuevamente",
+          });
     }
   } catch (e) {
     res.send({ message: "No se pudo crear usuario" });

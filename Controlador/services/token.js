@@ -4,6 +4,7 @@ const duracion = 24 * 60 * 60;
 
 module.exports = {
   encodeUser: (user) => {
+    console.log(user);
     const token = jwt.sign(
       {
         iduser: user.iduser,
