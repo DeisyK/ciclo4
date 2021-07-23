@@ -1,14 +1,1 @@
-[
-  {
-    "id": 1,
-    "nombre": "",
-    "apellido": "",
-    "telefono": "",
-    "email": "",
-    "fecha_de_nacimiento": "",
-    "categoria": "",
-    "profesion": "",
-    "pais": "",
-    "usuario": 1
-  }
-]
+[{"id":1,"nombre":"","apellido":"","telefono":"","email":"","fecha_de_nacimiento":"","categoria":"","profesion":"","pais":"","usuario":0},{"id":2,"nombre":"amigos","email":"jairfonseca64@yahoo.es","fecha_de_nacimiento":"1999-05-12","usuario":"1"},{"id":2,"nombre":"amigos","email":"jairfonseca64@yahoo.es","fecha_de_nacimiento":"1999-05-12","usuario":"1"},{"id":4,"nombre":"amigos","email":"jairfonseca64@yahoo.es","fecha_de_nacimiento":"1999-05-12","usuario":"1"},{"id":4,"nombre":"amigos","email":"jairfonseca64@yahoo.es","fecha_de_nacimiento":"1999-05-12","usuario":"1"},{"id":"[object Object],[object Object],[object Object],[object Object],[object Object]1","nombre":"amigos","email":"jairfonseca64@yahoo.es","fecha_de_nacimiento":"1999-05-12","usuario":"1"},{"id":"[object Object],[object Object],[object Object],[object Object],[object Object]1","nombre":"amigos","email":"jairfonseca64@yahoo.es","fecha_de_nacimiento":"1999-05-12","usuario":"1"},{"id":8,"nombre":"amigos","email":"jairfonseca64@yahoo.es","fecha_de_nacimiento":"1999-05-12","usuario":"1"},{"id":8,"nombre":"amigos","email":"jairfonseca64@yahoo.es","fecha_de_nacimiento":"1999-05-12","usuario":"1"},{"id":10,"nombre":"amigos","email":"jairfonseca64@yahoo.es","fecha_de_nacimiento":"1999-05-12","usuario":"1"},{"id":10,"nombre":"amigos","email":"jairfonseca64@yahoo.es","fecha_de_nacimiento":"1999-05-12","usuario":"1"},{"id":12,"nombre":"amigos","email":"jairfonseca64@yahoo.es","fecha_de_nacimiento":"1999-05-12","usuario":"1"},{"id":13,"nombre":"amigos","email":"jairfonseca64@yahoo.es","fecha_de_nacimiento":"1999-05-12","usuario":"1"},{"id":14,"nombre":"amigos","email":"jairfonseca64@yahoo.es","fecha_de_nacimiento":"1999-05-12","usuario":"1"},{"id":15,"nombre":"amigos","email":"jairfonseca64@yahoo.es","fecha_de_nacimiento":"1999-05-12","usuario":"1"},{"id":16,"nombre":"amigos","email":"jairfonseca64@yahoo.es","fecha_de_nacimiento":"1999-05-12","usuario":"1"}]

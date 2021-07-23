@@ -1,1 +1,28 @@
-[{"id":1,"nombre":"Prueba 1","apellido":"","numero":555,"fecha_de_nacimiento":"","genero":"","email":"","password":"","":""},{"id":2,"nombre":"amigos","apellidos":"solo amigos","numero":"2021-05-15","fecha_de_nacimiento":"1999-05-12","genero":"0000","email":"jairfonseca64@yahoo.es","password":"$2a$08$RBLrd6Gv7hwQOJkvdjmBwupYoazEOdyFMJbg3lGgx6S9N111x2vBm"}]
+[
+  {
+    "id": 1,
+    "nombre": "",
+    "apellido": "",
+    "telefono": "",
+    "email": "",
+    "fecha_de_nacimiento": "",
+    "categoria": "",
+    "profesion": "",
+    "pais": "",
+    "usuario": 0
+  },
+  {
+    "id": 2,
+    "nombre": "amigos",
+    "email": "jairfonseca64@yahoo.es",
+    "fecha_de_nacimiento": "1999-05-12",
+    "usuario": "1"
+  },
+  {
+    "id": 2,
+    "nombre": "amigos",
+    "email": "jairfonseca64@yahoo.es",
+    "fecha_de_nacimiento": "1999-05-12",
+    "usuario": "1"
+  }
+]
