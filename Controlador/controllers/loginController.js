@@ -19,7 +19,7 @@ exports.login = async (req, res, next) => {
       const isTrue = bcrypt.compareSync(req.body.password, register.password);
       if (isTrue) {
         const token = tokenServices.encodeUser(register);
-        console.log(token);
+
         res.send({ token });
       } else {
         res.send({ message: "Revise email y contraseña" });
@@ -35,7 +35,6 @@ exports.login = async (req, res, next) => {
 exports.register = async (req, res, next) => {
   try {
     let users = usuarios();
-
     const register = users.filter((one) => one.email === req.body.email);
 
     if (register.length > 0) {
@@ -67,7 +66,7 @@ exports.register = async (req, res, next) => {
         users
       );
       const mailOk = await sendEmails.register(nuevo, password);
-      console.log(mailOk);
+
       mailOk
         ? res.status(200).send({ message: "Registro creado con exito" })
         : res.send({
@@ -81,23 +80,28 @@ exports.register = async (req, res, next) => {
 
 exports.recovery = async (req, res, next) => {
   try {
+    let mailOk = false;
     let users = usuarios();
     users.forEach((one) => {
       if (one.email === req.body.email) {
-        const password = generator.generate({
-          length: 10,
-          numbers: true,
-        });
+        const password = "12345678";
+        // const password = generator.generate({
+        //   length: 10,
+        //   numbers: true,
+        // });
         const salt = bcrypt.genSaltSync(8);
         one.password = bcrypt.hashSync(password, salt);
-        sendEmails.recoveryPassword(one, password);
-        res.status(200);
-        fs.writeFileSync(
-          path.join(__dirname, "../database/usuarios.json"),
-          users
-        );
-        res.status(200);
+
+        mailOk = sendEmails.recoveryPassword(one, password);
       }
     });
+    if (mailOk) {
+      users = JSON.stringify(users);
+      const ruta = path.join(__dirname, "../database/usuarios.json");
+      fs.writeFileSync(ruta, users);
+      res.send({ message: "Contraseña cambiada" });
+    } else {
+      res.send({ error: "No se pudo cambiar la contraseña" });
+    }
   } catch (e) {}
 };
