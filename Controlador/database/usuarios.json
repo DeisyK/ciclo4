@@ -14,15 +14,24 @@
   {
     "id": 2,
     "nombre": "amigos",
-    "email": "jairfonseca64@yahoo.es",
+    "apellidos": "solo amigos",
     "fecha_de_nacimiento": "1999-05-12",
-    "usuario": "1"
+    "email": "jairfonseca64@yahoo.es",
+    "password": "$2a$08$atl/aBFv.3grI.S9UmeIm.wbbf4/epgITrcv9cdLvQBpzmmfFP6Ye"
   },
   {
-    "id": 2,
+    "id": 3,
     "nombre": "amigos",
-    "email": "jairfonseca64@yahoo.es",
+    "apellidos": "solo amigos",
     "fecha_de_nacimiento": "1999-05-12",
-    "usuario": "1"
+    "password": "$2a$08$rkK58xoLyb8uLcXp0XhFQOTylbHSvH.s2QyKUxYij66MpoV126aOa"
+  },
+  {
+    "id": 4,
+    "nombre": "amigos",
+    "apellidos": "solo amigos",
+    "fecha_de_nacimiento": "1999-05-12",
+    "email": "jairfonseca64@yahoo.eso",
+    "password": "$2a$08$qvjOQYb.Zfeq0Thigcaffexn2Nl/7Bcljb6AOYpZ2rYnKZzE.M8HS"
   }
 ]

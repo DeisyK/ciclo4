@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 const tokenServices = require("../services/token");
 const generator = require("generate-password");
 const sendEmails = require("../services/emails");
+const { validationResult } = require("express-validator");
 
 const usuarios = () => {
   return JSON.parse(
@@ -13,9 +14,15 @@ const usuarios = () => {
 
 exports.login = async (req, res, next) => {
   try {
+    const resultValidation = validationResult(req);
+    if (resultValidation.errors.length > 0) {
+      console.log(resultValidation.mapped());
+      res.send({ errors: resultValidation.mapped() });
+    }
     const users = usuarios();
     const register = users.find((one) => one.email === req.body.email);
     if (register) {
+      console.log(register);
       const isTrue = bcrypt.compareSync(req.body.password, register.password);
       if (isTrue) {
         const token = tokenServices.encodeUser(register);
@@ -34,6 +41,11 @@ exports.login = async (req, res, next) => {
 
 exports.register = async (req, res, next) => {
   try {
+    const resultValidation = validationResult(req);
+    if (resultValidation.errors.length > 0) {
+      console.log(resultValidation.mapped());
+      res.send({ errors: resultValidation.mapped() });
+    }
     let users = usuarios();
     const register = users.filter((one) => one.email === req.body.email);
 
@@ -42,11 +54,11 @@ exports.register = async (req, res, next) => {
         message: "No puede ingresar un correo electronico que ya exista",
       });
     } else {
-      const password = "12345678";
-      /* const password = generator.generate({
+      //const password = "12345678";
+      const password = generator.generate({
         length: 10,
         numbers: true,
-      });*/
+      });
       const salt = bcrypt.genSaltSync(8);
 
       const nuevo = {
