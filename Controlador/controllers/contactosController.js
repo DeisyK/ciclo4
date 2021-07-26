@@ -12,7 +12,7 @@ exports.list = (req, res, next) => {
     const contacts = contactos();
     const list = contacts.filter((one) => one.usuario == req.params.id);
     list.length > 0
-      ? res.send(list)
+      ? res.send(contacts)
       : res.send({
           mesagge: "Aún no tiene contactos guardados por el momento.",
         });

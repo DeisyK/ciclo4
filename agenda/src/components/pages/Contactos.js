@@ -1,9 +1,8 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-
-
+import axios from "axios";
+import api from "../../assets/utils";
 import {
-  
   Table,
   Button,
   Container,
@@ -14,19 +13,9 @@ import {
   ModalFooter,
 } from "reactstrap";
 
-
-const data = [  
-  { id: 1, nombre: "Deisy Katherine Pineda", telefono: 3133523752,  Email: "kte_0330@hotmail.com", categoria:"Familiar"},
-  { id: 2, nombre: "Nelson Ricardo Hurtado F.", telefono: 3102215050, Email: "lf62@hotmail.com", categoria:"Trabajo" },
-  { id: 3, nombre: "Hector Jair Fonseca Pinto", telefono: 56932679167,  Email: "jairfonseca64@yahoo.es", categoria:"Universidad"},
-  { id: 4, nombre: "Carlos Andrés Gutiérrez Cruz", telefono: 3153011375, Email: "contacto10@gmail.com", categoria:"Amigo"},
-  { id: 5, nombre: "Walter Gonzalez Rincon", telefono: 3215527911, Email: "wg8901@gmail.com" , categoria:"Familiar"},
-];
-
-class Contactos extends React.Component { 
-
+class Contactos extends React.Component {
   state = {
-    data: data,
+    data: [],
     modalActualizar: false,
     modalInsertar: false,
     modalDetalle: false,
@@ -38,11 +27,9 @@ class Contactos extends React.Component {
       categoria: "",
     },
 
-    dataSearch: [],  
-    modalConfirmacion: false
+    dataSearch: [],
+    modalConfirmacion: false,
   };
-  
-
 
   mostrarModalActualizar = (dato) => {
     this.setState({
@@ -55,7 +42,6 @@ class Contactos extends React.Component {
     this.setState({ modalActualizar: false });
   };
 
-
   mostrarModalDetalle = (dato) => {
     this.setState({
       form: dato,
@@ -66,7 +52,6 @@ class Contactos extends React.Component {
   cerrarModalDetalle = () => {
     this.setState({ modalDetalle: false });
   };
-
 
   mostrarModalInsertar = () => {
     this.setState({
@@ -94,7 +79,9 @@ class Contactos extends React.Component {
   };
 
   eliminar = (dato) => {
-    var opcion = window.confirm("Estás Seguro que deseas Eliminar el contacto "+dato.nombre);
+    var opcion = window.confirm(
+      "Estás Seguro que deseas Eliminar el contacto " + dato.nombre
+    );
     if (opcion) {
       var contador = 0;
       var arreglo = this.state.data;
@@ -108,24 +95,23 @@ class Contactos extends React.Component {
     }
   };
 
-  insertar= ()=>{
-    var valorNuevo= {...this.state.form};
-    valorNuevo.id=this.state.data.length+1;
-    var lista= this.state.data;
+  insertar = () => {
+    var valorNuevo = { ...this.state.form };
+    valorNuevo.id = this.state.data.length + 1;
+    var lista = this.state.data;
     lista.push(valorNuevo);
     this.setState({ modalInsertar: false, data: lista });
-  }
+  };
 
-  filtrar = (e) =>{
+  filtrar = (e) => {
     const { value } = e.target;
     let lista = this.state.data;
-    const filtered = lista.filter(fltr => fltr.nombre.toLowerCase().includes(value.toLowerCase()));
-    
-   
-    this.setState({ dataSearch: !value ?  [] : filtered});   
-  }
+    const filtered = lista.filter((fltr) =>
+      fltr.nombre.toLowerCase().includes(value.toLowerCase())
+    );
 
-
+    this.setState({ dataSearch: !value ? [] : filtered });
+  };
 
   handleChange = (e) => {
     this.setState({
@@ -135,32 +121,42 @@ class Contactos extends React.Component {
       },
     });
   };
+  componentDidMount() {
+    axios
+      .get(`${api}contactos/list`)
+      .then((response) => this.setState({ data: response.data }));
+  }
 
   render() {
-    
     return (
-
-      <> 
-         <nav className="navbar navbar-light bg-light">         
-          <div class="container-fluid">                             
-          <img 
-                src="https://i.ibb.co/KVbGyG3/logo-small.png" 
-                width="50"
-                height="30"
-                className="d-inline-block align-top"  
-                alt="logo-small"              
-            />     
-            <a class="navbar-brand">Agenda de contactos</a>          
-            <form  class="d-flex">
-              <input class="form-control me-2" onChange={this.filtrar} type="search" placeholder="Search" aria-label="Search"></input>          
+      <>
+        <nav className="navbar navbar-light bg-light">
+          <div class="container-fluid">
+            <img
+              src="https://i.ibb.co/KVbGyG3/logo-small.png"
+              width="50"
+              height="30"
+              className="d-inline-block align-top"
+              alt="logo-small"
+            />
+            <a class="navbar-brand">Agenda de contactos</a>
+            <form class="d-flex">
+              <input
+                class="form-control me-2"
+                onChange={this.filtrar}
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
+              ></input>
             </form>
-            </div>
-        </nav>     
+          </div>
+        </nav>
 
-        <Container>       
-
-        <br />
-          <Button color="success" onClick={()=>this.mostrarModalInsertar()}>Agregar</Button>
+        <Container>
+          <br />
+          <Button color="success" onClick={() => this.mostrarModalInsertar()}>
+            Agregar
+          </Button>
           <br />
           <br />
           <Table>
@@ -176,16 +172,28 @@ class Contactos extends React.Component {
             </thead>
             <tbody>
               {this.state.data.map((dato) => (
-                <tr key={dato.id}>
-                  <td>{dato.id}</td>
-                  <td>{dato.nombre}</td>
-                  <td>{dato.telefono}</td>
-                  <td>{dato.Email}</td> 
-                  <td>{dato.categoria}</td>                  
+                <tr key={dato.id && dato.id}>
+                  <td>{dato.id && dato.id}</td>
+                  <td>{dato.nombre && dato.nombre}</td>
+                  <td>{dato.telefono && dato.telefono}</td>
+                  <td>{dato.Email && dato.Email}</td>
+                  <td>{dato.categoria && dato.categoria}</td>
                   <td>
-                   <Button color="success" onClick={() => this.mostrarModalDetalle(dato)}>Detalle</Button>{" "}
-                    <Button color="primary" onClick={() => this.mostrarModalActualizar(dato)}>Editar</Button>{" "}
-                    <Button color="danger" onClick={()=> this.eliminar(dato)}>Eliminar</Button>
+                    <Button
+                      color="success"
+                      onClick={() => this.mostrarModalDetalle(dato)}
+                    >
+                      Detalle
+                    </Button>{" "}
+                    <Button
+                      color="primary"
+                      onClick={() => this.mostrarModalActualizar(dato)}
+                    >
+                      Editar
+                    </Button>{" "}
+                    <Button color="danger" onClick={() => this.eliminar(dato)}>
+                      Eliminar
+                    </Button>
                   </td>
                 </tr>
               ))}
@@ -195,14 +203,14 @@ class Contactos extends React.Component {
 
         <Modal isOpen={this.state.modalActualizar}>
           <ModalHeader>
-           <div><h3>Editar Contacto</h3></div>
+            <div>
+              <h3>Editar Contacto</h3>
+            </div>
           </ModalHeader>
 
           <ModalBody>
             <FormGroup>
-              <label>
-               Id:
-              </label>            
+              <label>Id:</label>
               <input
                 className="form-control"
                 readOnly
@@ -210,11 +218,9 @@ class Contactos extends React.Component {
                 value={this.state.form.id}
               />
             </FormGroup>
-            
+
             <FormGroup>
-              <label>
-                Nombre: 
-              </label>
+              <label>Nombre:</label>
               <input
                 className="form-control"
                 name="nombre"
@@ -223,11 +229,9 @@ class Contactos extends React.Component {
                 value={this.state.form.nombre}
               />
             </FormGroup>
-            
+
             <FormGroup>
-              <label>
-                Telefono: 
-              </label>
+              <label>Telefono:</label>
               <input
                 className="form-control"
                 name="telefono"
@@ -238,9 +242,7 @@ class Contactos extends React.Component {
             </FormGroup>
 
             <FormGroup>
-              <label>
-                Email: 
-              </label>
+              <label>Email:</label>
               <input
                 className="form-control"
                 name="Email"
@@ -251,9 +253,7 @@ class Contactos extends React.Component {
             </FormGroup>
 
             <FormGroup>
-              <label>
-                Categoría: 
-              </label>
+              <label>Categoría:</label>
               <input
                 className="form-control"
                 name="categoria"
@@ -262,7 +262,6 @@ class Contactos extends React.Component {
                 value={this.state.form.categoria}
               />
             </FormGroup>
-
           </ModalBody>
 
           <ModalFooter>
@@ -272,40 +271,33 @@ class Contactos extends React.Component {
             >
               Guardar
             </Button>
-            <Button
-              color="danger"
-              onClick={() => this.cerrarModalActualizar()}
-            >
+            <Button color="danger" onClick={() => this.cerrarModalActualizar()}>
               Cancelar
             </Button>
           </ModalFooter>
         </Modal>
 
-
-
         <Modal isOpen={this.state.modalInsertar}>
           <ModalHeader>
-           <div><h3>Agregar Contacto</h3></div>
+            <div>
+              <h3>Agregar Contacto</h3>
+            </div>
           </ModalHeader>
 
           <ModalBody>
             <FormGroup>
-              <label>
-                Id: 
-              </label>
-              
+              <label>Id:</label>
+
               <input
                 className="form-control"
                 readOnly
                 type="text"
-                value={this.state.data.length+1}
+                value={this.state.data.length + 1}
               />
             </FormGroup>
-            
+
             <FormGroup>
-              <label>
-                Nombre: 
-              </label>
+              <label>Nombre:</label>
               <input
                 className="form-control"
                 name="nombre"
@@ -313,11 +305,9 @@ class Contactos extends React.Component {
                 onChange={this.handleChange}
               />
             </FormGroup>
-            
+
             <FormGroup>
-              <label>
-                Telefono: 
-              </label>
+              <label>Telefono:</label>
               <input
                 className="form-control"
                 name="telefono"
@@ -327,9 +317,7 @@ class Contactos extends React.Component {
             </FormGroup>
 
             <FormGroup>
-              <label>
-                Email: 
-              </label>
+              <label>Email:</label>
               <input
                 className="form-control"
                 name="Email"
@@ -337,11 +325,9 @@ class Contactos extends React.Component {
                 onChange={this.handleChange}
               />
             </FormGroup>
-            
+
             <FormGroup>
-              <label>
-                Categoría: 
-              </label>
+              <label>Categoría:</label>
               <input
                 className="form-control"
                 name="categoria"
@@ -350,14 +336,10 @@ class Contactos extends React.Component {
                 value={this.state.form.categoria}
               />
             </FormGroup>
-
           </ModalBody>
 
           <ModalFooter>
-            <Button
-              color="primary"
-              onClick={() => this.insertar()}
-            >
+            <Button color="primary" onClick={() => this.insertar()}>
               Agregar
             </Button>
             <Button
@@ -369,19 +351,18 @@ class Contactos extends React.Component {
           </ModalFooter>
         </Modal>
 
-
         <Modal isOpen={this.state.modalDetalle}>
           <ModalHeader>
-           <div><h3>Detalle Contacto</h3></div>
+            <div>
+              <h3>Detalle Contacto</h3>
+            </div>
           </ModalHeader>
 
-          <ModalBody> 
-              <p>Descripción detalle</p>          
-
+          <ModalBody>
+            <p>Descripción detalle</p>
           </ModalBody>
 
           <ModalFooter>
-            
             <Button
               className="btn btn-danger"
               onClick={() => this.cerrarModalDetalle()}
@@ -390,12 +371,8 @@ class Contactos extends React.Component {
             </Button>
           </ModalFooter>
         </Modal>
-      
-        
       </>
     );
   }
 }
 export default Contactos;
-
-

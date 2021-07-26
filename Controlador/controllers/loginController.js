@@ -14,11 +14,13 @@ const usuarios = () => {
 
 exports.login = async (req, res, next) => {
   try {
+    console.log(req.body);
     const resultValidation = validationResult(req);
     if (resultValidation.errors.length > 0) {
       console.log(resultValidation.mapped());
       res.send({ errors: resultValidation.mapped() });
     }
+
     const users = usuarios();
     const register = users.find((one) => one.email === req.body.email);
     if (register) {
@@ -54,11 +56,11 @@ exports.register = async (req, res, next) => {
         message: "No puede ingresar un correo electronico que ya exista",
       });
     } else {
-      //const password = "12345678";
-      const password = generator.generate({
-        length: 10,
-        numbers: true,
-      });
+      const password = "12345678";
+      // const password = generator.generate({
+      //   length: 10,
+      //   numbers: true,
+      // });
       const salt = bcrypt.genSaltSync(8);
 
       const nuevo = {

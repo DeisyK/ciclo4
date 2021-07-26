@@ -1,64 +1,83 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { Button, Form, FormGroup, Label, Input, Card } from "reactstrap";
+import { Link, useHistory } from "react-router-dom";
+//import { Button, Form, FormGroup, Label, Input, Card } from "reactstrap";
+import "antd/dist/antd.css";
+import { Form, Input, Button, Checkbox } from "antd";
 import "../css/login.css";
+import api from "../../assets/utils";
+import axios from "axios";
 
-const Example = (props) => {
-  const [errorEmail, setErrorEmail] = useState(false);
-  const [errorPassword, setErrorPassword] = useState(false);
+const Login = () => {
+  const history = useHistory();
+  const onFinish = async (values) => {
+    const response = await axios.post(`${api}login/into`, {
+      email: values.email,
+      password: values.password,
+    });
+    if (response.data.token) {
+      localStorage.setItem("login", response.data.token);
+      history.push("/Miperfil");
+    }
+  };
 
+  const onFinishFailed = (errorInfo) => {
+    alert("Failed:", errorInfo);
+  };
 
-const validar = ()=>{
-  props.setLoginUser(true);
- 
-}
   return (
-      <Card className='login'>
-          
-    <Form className='formulario'>
-       <h4>Ingresa con E-mail y contraseña</h4>
-      <FormGroup>        
-        <Label for="exampleEmail">Email</Label>
-        <Input type="email" name="email" id="exampleEmail" placeholder="Ingresa tu E-mail" />
-      {errorEmail ? <p>Por favor ingrese un email valido</p>:null}
-      </FormGroup>
-      <FormGroup>
-        <Label for="examplePassword">Password</Label>
-        <Input type="password" name="password" id="examplePassword" placeholder="Ingresar Contraseña" />
-      </FormGroup>
-      <Link to="/Registro">Olvidaste tu contraseña</Link>     
-      
-     
-      <FormGroup check>
-        <Label check>
-          <Input type="checkbox" />{' '}
-          Recordarme
-        </Label>
-      </FormGroup>
-      <Link  to="/Miperfil" onClick={()=>{
-        validar()
-       
+    <div className="login">
+      <Form
+        name="basic"
+        labelCol={{
+          span: 8,
+        }}
+        wrapperCol={{
+          span: 16,
+        }}
+        initialValues={{
+          remember: true,
+        }}
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+      >
+        <Form.Item
+          name={"email"}
+          label="Email"
+          rules={[
+            {
+              type: "email",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
 
-        <FormGroup check>
-          <Label check>
-            <Input type="checkbox" /> Recordarme
-          </Label>
-        </FormGroup>
-        <Link
-          to="/Miperfil"
-          onClick={() => {
-            validar();
+        <Form.Item
+          label="Password"
+          name="password"
+          rules={[
+            {
+              required: true,
+              message: "Ingrese una contraseña",
+            },
+          ]}
+        >
+          <Input.Password />
+        </Form.Item>
+
+        <Form.Item
+          wrapperCol={{
+            offset: 8,
+            span: 16,
           }}
         >
-          <Button>Entrar</Button>
-        </Link>
-        <Link to="/">
-          <Button>← Volver</Button>
-        </Link>
-        <Link to="/Registro">Registrarse</Link>
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+        </Form.Item>
       </Form>
-    </Card>
+    </div>
   );
 };
 
-export default Example;
+export default Login;
