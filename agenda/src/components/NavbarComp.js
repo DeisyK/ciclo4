@@ -1,8 +1,9 @@
 import React from "react";
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import "./css/login.css";
 
-const Navbarcomp = () => {
+const Navbarcomp = (props) => {
   return (
     <div>
       <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -22,20 +23,31 @@ const Navbarcomp = () => {
 
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
-              {localStorage.getItem("login") ? (
-                <Link to="/Categorias">Categorías</Link>
+              {props.token ? (
+                <Link
+                  to="/Categorias"
+                  style={{ textDecoration: "none", color: "#FFF" }}
+                >
+                  Categorías
+                </Link>
               ) : null}
 
-              {localStorage.getItem("login") ? (
-                <Link to="/Contactos">Contactos</Link>
+              {props.token ? (
+                <Link
+                  to="/Contactos"
+                  style={{ textDecoration: "none", color: "#FFF" }}
+                >
+                  Contactos
+                </Link>
               ) : null}
             </Nav>
             <Nav>
-              {localStorage.getItem("login") ? (
+              {props.token ? (
                 <Nav.Link
                   href="/"
                   onClick={() => {
                     localStorage.removeItem("login");
+                    props.setToken(null);
                   }}
                 >
                   Salir

@@ -21,13 +21,13 @@ exports.login = async (req, res, next) => {
 
         res.send({ token });
       } else {
-        res.send({ message: "Revise email y contraseña" });
+        res.send({ error: "Revise email y contraseña" });
       }
     } else {
-      res.send({ message: "Revise email y contraseña" });
+      res.send({ error: "Revise email y contraseña" });
     }
   } catch (e) {
-    res.send({ message: "Error al iniciar sesión" });
+    res.send({ error: "Error al iniciar sesión" });
   }
 };
 
