@@ -1,17 +1,13 @@
-const fs = require("fs");
-const path = require("path");
+const db = require("../models/index");
+const { decode } = require("../services/token");
 
-const contactos = () => {
-  return JSON.parse(
-    fs.readFileSync(path.join(__dirname, "../database/contactos.json"), "utf-8")
-  );
-};
-
-exports.list = (req, res, next) => {
+exports.list = async (req, res) => {
   try {
-    const contacts = contactos();
-    const list = contacts.filter((one) => one.usuario == req.params.id);
-    list.length > 0
+    const user = await decode(req.headers.token);
+    const contacts = await db.Contactos.find({
+      user_id: user._id,
+    });
+    contacts.length > 0
       ? res.send(contacts)
       : res.send({
           mesagge: "Aún no tiene contactos guardados por el momento.",
@@ -21,28 +17,24 @@ exports.list = (req, res, next) => {
   }
 };
 
-exports.add = (req, res, next) => {
+exports.add = async (req, res) => {
   try {
-    const contacts = contactos();
-    const id = contacts.length + 1;
-    console.log(id);
-    const nuevo = {
-      id: id,
-      nombre: req.body.nombre,
-      apellido: req.body.apellido,
-      telefono: req.body.telefono,
+    const user = await decode(req.headers.token);
+    const nuevo = new db.Contactos({
+      name: req.body.name,
+      address: req.body.address,
+      birthdate: req.body.birthdate,
+      country: req.body.country,
+      cellphone: req.body.cellphone,
+      notes: req.body.notes,
       email: req.body.email,
-      fecha_de_nacimiento: req.body.fecha_de_nacimiento,
-      categoria: req.body.categoria,
-      profesion: req.body.profesion,
-      pais: req.body.pais,
-      usuario: req.params.id,
-    };
-    let list = [...contacts, nuevo];
-    list = JSON.stringify(list);
-    fs.writeFileSync(path.join(__dirname, "../database/contactos.json"), list);
+      surname: req.body.surname,
+      category_id: req.body.category_id,
+      user_id: user._id,
+    });
 
-    res.send(nuevo);
+    const response = await nuevo.save();
+    res.send(response);
   } catch (error) {
     res.send({
       error: "No se pudo agregar el nuevo contacto, intente nuevamente",
@@ -50,25 +42,62 @@ exports.add = (req, res, next) => {
   }
 };
 
-exports.edit = (req, res, next) => {
+exports.edit = async (req, res) => {
   try {
-    const list = contactos();
-    list.forEach((one) => {
-      if (one.id == req.param.id) {
-        one.nombre = req.body.nombre;
-        one.apellido = req.body.apellido;
-        one.telefono = req.body.telefono;
-        one.email = req.body.email;
-        one.fecha_de_nacimiento = req.body.fecha_de_nacimiento;
-        one.categoria = req.body.categoria;
-        one.profesion = req.body.profesion;
-        one.pais = req.body.pais;
-        console.log(one);
-      }
-    });
-    const nuevo = JSON.stringify(list);
+    const { id } = await decode(req.headers.token);
+    const contact = await db.Contactos.findOne({ _id: req.params.id });
+    if (contact.user_id === id) {
+      const response = await db.Contactos.updateOne(
+        {
+          _id: req.params.id,
+        },
+        {
+          name: req.body.name,
+          address: req.body.address,
+          birthdate: req.body.birthdate,
+          country: req.body.country,
+          cellphone: req.body.cellphone,
+          notes: req.body.notes,
+          email: req.body.email,
+          surname: req.body.surname,
+          category_id: req.body.category_id,
+        }
+      );
+      response.n > 0
+        ? res.status(200).send({ message: "Contacto actulizado." })
+        : res.send({
+            error:
+              "Error al actualizar el contacto, por favor intente nuevamente.",
+          });
+    } else {
+      res.send({ error: "No tiene permisos para modificar este contacto" });
+    }
+  } catch (error) {
+    res.send({ error: "No se pudo actualizar el contacto." });
+  }
+};
 
-    fs.writeFileSync(path.join(__dirname, "../database/contactos.json"), nuevo);
-    res.send(contactos());
-  } catch (error) {}
+exports.destroy = async (req, res) => {
+  try {
+    const { id } = await decode(req.headers.token);
+    const contact = await db.Contactos.findOne({ _id: req.params.id });
+    if (contact.user_id === id) {
+      const response = await db.Contactos.deleteOne({
+        _id: req.params.id,
+      });
+      console.log(response);
+      response.n > 0
+        ? res.status(200).send({ message: "Contacto eliminado" })
+        : res.send({
+            error:
+              "Error al eliminar el contacto, por favor intente nuevamente.",
+          });
+    } else {
+      res.send({ error: "No tiene permisos para eliminar este contacto" });
+    }
+  } catch (e) {
+    res.send({
+      error: "Error al eliminar el contacto, por favor intente nuevamente",
+    });
+  }
 };

@@ -13,7 +13,7 @@ const validation = {
       .withMessage("Tienes que ingresar una contraseña"),
   ],
   register: [
-    body("nombre").notEmpty().withMessage("Tiene que ingresar un nombre"),
+    body("name").notEmpty().withMessage("Tiene que ingresar un nombre"),
     body("email")
       .notEmpty()
       .withMessage("Falta email")
@@ -23,6 +23,14 @@ const validation = {
     body("numero")
       .notEmpty()
       .withMessage("Tiene que ingresar un número de telefono"),
+  ],
+  recovery: [
+    body("email")
+      .notEmpty()
+      .withMessage("Falta email")
+      .bail()
+      .isEmail()
+      .withMessage("Ingresa un email valido"),
   ],
 };
 
