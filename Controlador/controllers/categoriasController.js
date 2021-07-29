@@ -1,66 +1,43 @@
-const fs = require("fs");
-const path = require("path");
+const db = require("../models/index");
+const { decode } = require("../services/token");
 
-const categorias = () => {
-  return JSON.parse(
-    fs.readFileSync(
-      path.join(__dirname, "../database/categorias.json"),
-      "utf-8"
-    )
-  );
-};
-
-/**
- * Metodos
- */
-exports.list = (req, res, next) => {
+exports.list = async (req, res, next) => {
   try {
-    res.send(categorias());
+    const { id } = await decode(req.headers.token);
+    const categories = await db.Categorias.find({ id_user: id });
+    categories.length > 0
+      ? res.send(categories)
+      : res.send({ message: "No se encontraron categorias guardadas" });
   } catch (error) {
     res.send({ message: "No se encontraron categorias" });
   }
 };
 
-exports.add = (req, res, next) => {
+exports.add = async (req, res, next) => {
   try {
-    const nuevo = {
-      id: categorias().length + 1,
-      nombre: req.body.nombre,
-      descripcion: req.body.descripcion,
-    };
+    const { id } = await decode(req.headers.token);
 
-    const created = JSON.stringify([...categorias(), nuevo]);
-    fs.writeFileSync(
-      path.join(__dirname, "../database/categorias.json"),
-      created
-    );
-    res.send(nuevo);
+    const register = await db
+      .Categorias({
+        name: req.body.name,
+        description: req.body.description,
+        user_id: id,
+      })
+      .save();
+
+    res.send(register);
   } catch (error) {
     res.send({ message: "No se pudo agregar categoria" });
   }
 };
 
-exports.search = (req, res, next) => {
+exports.one = async (req, res, next) => {
   try {
-    let results = [];
-    categorias().forEach((categoria) => {
-      if (categoria.nombre.includes(req.params.nombre)) {
-        results.push(categoria);
-      }
-    });
-    results.length > 0
-      ? res.send(results)
-      : res.send({ message: "No se encontraron coincidencias" });
-  } catch (error) {
-    res.send({ message: "Error buscando categorias." });
-  }
-};
-
-exports.one = (req, res, next) => {
-  try {
-    const categories = categorias();
-    const filter = categories.filter((one) => one.id == req.params.id);
-    res.send(filter);
+    const { id } = await decode(req.headers.token);
+    const find = await db.Categorias.findOne({ _id: req.params.id });
+    id === find.user_id
+      ? res.send(find)
+      : res.send({ error: "No tiene permiso para ver esta categoria" });
   } catch (error) {
     res.send({
       error: `Error al buscar la categoria, por favor intente nuevamente.`,
@@ -68,21 +45,26 @@ exports.one = (req, res, next) => {
   }
 };
 
-exports.update = (req, res, next) => {
+exports.update = async (req, res, next) => {
   try {
-    let categories = categorias();
-    categories.forEach((category) => {
-      if (category.id == req.params.id) {
-        category.nombre = req.params.nombre;
-        category.descripcion = req.params.descripcion;
-      }
-    });
-    const updated = JSON.stringify(categories);
-    fs.writeFileSync(
-      path.join(__dirname, "../database/categorias.json"),
-      updated
-    );
-    res.send({ message: "Categoría actualizada con exito" });
+    const { id } = await decode(req.headers.token);
+    const category = await db.Categorias.findOne({ _id: req.params.id });
+    if (category.user_id === id) {
+      const response = await db.Categorias.updateOne(
+        { _id: req.params.id },
+        {
+          name: req.body.name,
+          description: req.body.description,
+        }
+      );
+      response.n > 0
+        ? res.send({ message: "Categoría actualizada con exito." })
+        : res.send({ error: "No se encontró la categoria para editarla" });
+    } else {
+      res.send({
+        error: "No Tiene permisos para editar esta categoria.",
+      });
+    }
   } catch (error) {
     res.send({
       error: "Error al actualizar la categoría por favor intente nuevamente",
@@ -90,7 +72,28 @@ exports.update = (req, res, next) => {
   }
 };
 
-exports.destroy = (req, res, next) => {
+exports.destroy = async (req, res, next) => {
   try {
-  } catch (error) {}
+    const { id } = await decode(req.headers.token);
+    const category = await db.Categorias.findOne({ _id: req.params.id });
+    if (!category) res.send({ error: "Categoria no encontrada" });
+    if (category.user_id === id) {
+      const response = await db.Categorias.deleteOne({
+        _id: req.params.id,
+      });
+
+      response.n > 0
+        ? res.status(200).send({ message: "Categorias eliminada" })
+        : res.send({
+            error:
+              "Error al eliminar la categoria, por favor intente nuevamente.",
+          });
+    } else {
+      res.send({ error: "No tiene permisos para eliminar esta categoria" });
+    }
+  } catch (error) {
+    res.send({
+      error: "Error al eliminar la categoría por favor intente nuevamente",
+    });
+  }
 };

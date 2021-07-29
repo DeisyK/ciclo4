@@ -1,11 +1,11 @@
 const router = require("express").Router();
 const categoriasController = require("../../controllers/categoriasController");
+const { verifyUsuario } = require("../../middlewares/auth/auth");
 
-router.get("/list", categoriasController.list);
-router.post("/add", categoriasController.add);
-router.get("/:nombre/search", categoriasController.search);
-router.get("/:id/one", categoriasController.one);
-router.patch("/:id/update", categoriasController.update);
-router.delete("/:id/destroy", categoriasController.destroy);
+router.get("/list", verifyUsuario, categoriasController.list);
+router.post("/add", verifyUsuario, categoriasController.add);
+router.get("/:id/one", verifyUsuario, categoriasController.one);
+router.patch("/:id/edit", verifyUsuario, categoriasController.update);
+router.delete("/:id/destroy", verifyUsuario, categoriasController.destroy);
 
 module.exports = router;

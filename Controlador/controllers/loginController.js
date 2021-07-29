@@ -1,16 +1,9 @@
-const fs = require("fs");
-const path = require("path");
 const bcrypt = require("bcryptjs");
 const tokenServices = require("../services/token");
 const generator = require("generate-password");
 const sendEmails = require("../services/emails");
 const { validationResult } = require("express-validator");
 const db = require("../models/index");
-const usuarios = () => {
-  return JSON.parse(
-    fs.readFileSync(path.join(__dirname, "../database/usuarios.json"), "utf-8")
-  );
-};
 
 exports.login = async (req, res, next) => {
   try {
@@ -20,9 +13,6 @@ exports.login = async (req, res, next) => {
     }
 
     const register = await db.User.findOne({ email: req.body.email });
-    // const registers = await db.User.find();
-    // res.send(registers);
-
     if (register) {
       const isTrue = bcrypt.compareSync(req.body.password, register.password);
 
@@ -55,14 +45,15 @@ exports.register = async (req, res, next) => {
     // });
     const salt = bcrypt.genSaltSync(8);
 
-    const nuevo = new db.User({
-      name: req.body.name,
-      email: req.body.email,
-      password: bcrypt.hashSync(password, salt),
-    });
-    const response = await nuevo.save();
+    const register = await db
+      .User({
+        name: req.body.name,
+        email: req.body.email,
+        password: bcrypt.hashSync(password, salt),
+      })
+      .save();
 
-    const mailOk = await sendEmails.register(response, password);
+    const mailOk = await sendEmails.register(register, password);
 
     mailOk
       ? res.status(200).send({ message: "Registro creado con exito" })

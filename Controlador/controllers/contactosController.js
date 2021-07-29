@@ -34,21 +34,22 @@ exports.one = async (req, res) => {
 exports.add = async (req, res) => {
   try {
     const user = await decode(req.headers.token);
-    const nuevo = new db.Contactos({
-      name: req.body.name,
-      address: req.body.address,
-      birthdate: req.body.birthdate,
-      country: req.body.country,
-      cellphone: req.body.cellphone,
-      notes: req.body.notes,
-      email: req.body.email,
-      surname: req.body.surname,
-      category_id: req.body.category_id,
-      user_id: user._id,
-    });
+    const register = await db
+      .Contactos({
+        name: req.body.name,
+        address: req.body.address,
+        birthdate: req.body.birthdate,
+        country: req.body.country,
+        cellphone: req.body.cellphone,
+        notes: req.body.notes,
+        email: req.body.email,
+        surname: req.body.surname,
+        category_id: req.body.category_id,
+        user_id: user._id,
+      })
+      .save();
 
-    const response = await nuevo.save();
-    res.send(response);
+    res.send(register);
   } catch (error) {
     res.send({
       error: "No se pudo agregar el nuevo contacto, intente nuevamente",
@@ -99,7 +100,6 @@ exports.destroy = async (req, res) => {
       const response = await db.Contactos.deleteOne({
         _id: req.params.id,
       });
-      console.log(response);
       response.n > 0
         ? res.status(200).send({ message: "Contacto eliminado" })
         : res.send({

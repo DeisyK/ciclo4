@@ -6,6 +6,6 @@ router.get("/list", verifyUsuario, contactoController.list);
 router.get("/:id/one", verifyUsuario, contactoController.one);
 router.post("/add", verifyUsuario, contactoController.add);
 router.patch("/:id/edit", verifyUsuario, contactoController.edit);
-router.delete("/:id/delete", verifyUsuario, contactoController.destroy);
+router.delete("/:id/destroy", verifyUsuario, contactoController.destroy);
 
 module.exports = router;

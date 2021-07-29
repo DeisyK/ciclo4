@@ -48,8 +48,8 @@ exports.register = async (user, password) => {
 
   /*ENVIA EL MAIL */
 
-  const info = await transporter.sendMail(mailOptions);
-  console.log("mensaje enviado: %$", info.messageId);
+  await transporter.sendMail(mailOptions);
+
   return true;
 };
 
@@ -88,7 +88,7 @@ exports.recoveryPassword = async (user, password) => {
 
   /*ENVIA EL MAIL */
 
-  const info = await transporter.sendMail(mailOptions);
-  console.log("mensaje enviado: %$", info.messageId);
+  await transporter.sendMail(mailOptions);
+
   return true;
 };
