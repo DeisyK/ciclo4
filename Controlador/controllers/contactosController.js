@@ -17,6 +17,20 @@ exports.list = async (req, res) => {
   }
 };
 
+exports.one = async (req, res) => {
+  try {
+    const { id } = await decode(req.headers.token);
+    const contact = await db.Contactos.findOne({
+      _id: req.params.id,
+    });
+    id === contact.user_id
+      ? res.send(contact)
+      : res.send({ message: "No tiene permisos para ver este contacto" });
+  } catch (e) {
+    res.send({ error: "Error al buscar el contacto" });
+  }
+};
+
 exports.add = async (req, res) => {
   try {
     const user = await decode(req.headers.token);
