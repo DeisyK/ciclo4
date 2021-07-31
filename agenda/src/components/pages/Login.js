@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-//import { Button, Form, FormGroup, Label, Input, Card } from "reactstrap";
 import "antd/dist/antd.css";
 import { Form, Input, Button, Alert } from "antd";
 import "../css/login.css";
@@ -55,6 +54,8 @@ const Login = (props) => {
           rules={[
             {
               type: "email",
+              required: true,
+              message: "Ingrese un email valido",
             },
           ]}
         >

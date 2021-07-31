@@ -1,76 +1,94 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
-import "../css/registro.css"
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
+import { Alert, Card, Form, Input, Button, Select } from "antd";
+import axios from "axios";
+import "../css/registro.css";
+import api from "../../assets/utils";
 
 const Registro = (props) => {
-  return (
-    <Form className='formRegistro'>
-      <FormGroup>
-        <h4>Registrarse</h4>
-        
-      </FormGroup>
-      <FormGroup>
-        <Label for="exampleEmail">Nombre</Label>
-        <Input
-          type="text"
-          name="text"
-          id="exampleEmail"
-          placeholder="Ingresa tu nombre"
-        />
-      </FormGroup>
-      
-      <FormGroup>
-        <Label for="exampleUrl">Apellido</Label>
-        <Input
-          type="text"
-          name="text"
-          id="exampleUrl"
-          placeholder="Ingrese apellido"
-        />
-      </FormGroup>
-      <FormGroup>
-        <Label for="exampleNumber">Número</Label>
-        <Input
-          type="number"
-          name="number"
-          id="exampleNumber"
-          placeholder="Ingresa tu número telefónico"
-        />
-      </FormGroup>
-     
-      <FormGroup>
-        <Label for="exampleDate">Fecha de nacimiento</Label>
-        <Input
-          type="date"
-          name="date"
-          id="exampleDate"          
-        />
-      </FormGroup>
-      <FormGroup>
-        <Label for="exampleSelect">Género</Label>
-        <Input type="select" name="select" id="exampleSelect">
-          <option>Femenino</option>
-          <option>Masculino</option>
-          <option>Otro</option>          
-        </Input>
-      </FormGroup>
+  const [message, setMessage] = useState(undefined);
+  const [error, setError] = useState(undefined);
+  const history = useHistory();
+  const onFinish = (values) => {
+    axios
+      .post(`${api}login/register`, { email: values.email, name: values.name })
+      .then((response) => {
+        if (response.data.message) {
+          setMessage(response.data.message);
+          setTimeout(() => {
+            setMessage(undefined);
+            history.push("/Login");
+          }, 3000);
+        }
+        if (response.data.error) {
+          setError(response.data.error);
+          setTimeout(() => setError(undefined), 5000);
+        }
+      });
+  };
+  const onFinishFailed = (errorInfo) => {
+    setError("Error: debe ingresar un email.");
+    setTimeout(() => setError(undefined), 5000);
+  };
 
-      <FormGroup>
-        <Label for="exampleEmail">Email</Label>
-        <Input
-          type="email"
+  return (
+    <Card className="password">
+      <Form
+        className="formPw"
+        name="basic"
+        labelCol={{
+          span: 4,
+        }}
+        wrapperCol={{
+          span: 19,
+        }}
+        initialValues={{
+          remember: true,
+        }}
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+      >
+        <h4>Registro</h4>
+        {message ? <Alert message={message} type="success" /> : null}
+        {error ? <Alert message={error} type="error" /> : null}
+        <Form.Item
+          label="Nombre"
+          name="name"
+          rules={[
+            {
+              required: true,
+              message: "Ingrese su nombre",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          label="email"
           name="email"
-          id="exampleEmail"
-          placeholder="Ingresa tu E-mail"
-        />
-      </FormGroup>    
-      
-      <Link to="#"><Button>Registrarse</Button></Link>       
-      <Link to="/login"><Button>← Volver</Button></Link>      
-      
-    </Form>
+          rules={[
+            {
+              required: true,
+              message: "Ingrese su email",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Button type="primary" htmlType="submit">
+          Registarse
+        </Button>
+        <Button
+          type="reset"
+          htmlType="reset"
+          onClick={() => history.push("/Login")}
+        >
+          ← Volver
+        </Button>
+      </Form>
+    </Card>
   );
-}
+};
 
 export default Registro;

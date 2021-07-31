@@ -12,6 +12,7 @@ import PrivateRoute from "./PrivateRoute";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Navbarcomp from "../NavbarComp";
 import Inicio from "./Inicio";
+import DetalleContacto from "./DetalleContacto";
 
 const Home = () => (
   <div>
@@ -27,6 +28,7 @@ const Home = () => (
 export default function App() {
   const [token, setToken] = useState(null);
   const [cargarndoUsuario, setCargandoUsuario] = useState(true);
+  const [editar, setEditar] = useState(undefined);
   useEffect(() => {
     if (!localStorage.getItem("login")) {
       setCargandoUsuario(false);
@@ -60,8 +62,14 @@ export default function App() {
         <Route path="/Miperfil">
           <Miperfil />
         </Route>
-        <Route path="/EditarPerfil">
+        <Route path="/EditarPerfil/:id">
+          <EditarPerfil editar={editar} setEditar={setEditar} />
+        </Route>
+        <Route path="/crear-contacto">
           <EditarPerfil />
+        </Route>
+        <Route path="/:id/detalle-contacto">
+          <DetalleContacto editar={editar} setEditar={setEditar} />
         </Route>
         <Route path="/Contactos">
           <Contactos />

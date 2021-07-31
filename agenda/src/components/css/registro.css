@@ -1,12 +1,11 @@
-.formRegistro{
-    max-width: 500px;
-    margin: auto;
-    margin-top: 20px;
-    padding: 10px;    
-    height: 550px;     
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    background-color: #bdc3c7 ;
+.formRegistro {
+  max-width: 500px;
+  margin: auto;
+  margin-top: 20px;
+  padding: 10px;
+  height: 550px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  /*background-color: #bdc3c7 ;*/
 }
-    

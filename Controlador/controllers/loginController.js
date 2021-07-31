@@ -38,11 +38,11 @@ exports.register = async (req, res, next) => {
       res.send({ errors: resultValidation.mapped() });
     }
 
-    const password = "12345678";
-    // const password = generator.generate({
-    //   length: 10,
-    //   numbers: true,
-    // });
+    // const password = "12345678";
+    const password = generator.generate({
+      length: 10,
+      numbers: true,
+    });
     const salt = bcrypt.genSaltSync(8);
 
     const register = await db
@@ -56,12 +56,14 @@ exports.register = async (req, res, next) => {
     const mailOk = await sendEmails.register(register, password);
 
     mailOk
-      ? res.status(200).send({ message: "Registro creado con exito" })
+      ? res
+          .status(200)
+          .send({ message: "Registro creado con exito, revise su correo." })
       : res.send({
-          message: "No se pudo realizar el registro intente nuevamente",
+          Error: "No se pudo realizar el registro intente nuevamente",
         });
   } catch (e) {
-    res.send({ message: "No se pudo crear usuario" });
+    res.send({ Error: "No se pudo crear usuario" });
   }
 };
 
@@ -79,6 +81,7 @@ exports.recovery = async (req, res, next) => {
     //   numbers: true,
     // });
     const salt = bcrypt.genSaltSync(8);
+
     const response = await db.User.updateOne(
       { email: req.body.email },
       { password: bcrypt.hashSync(password, salt) }
@@ -87,7 +90,9 @@ exports.recovery = async (req, res, next) => {
       const one = await db.User.findOne({ email: req.body.email });
       mailOk = sendEmails.recoveryPassword(one, password);
       if (mailOk) {
-        res.send({ message: "Contraseña cambiada" });
+        res.send({
+          message: "Contraseña cambiada, revise su correo electronico.",
+        });
       } else {
         res.send({ error: "No se pudo cambiar la contraseña" });
       }

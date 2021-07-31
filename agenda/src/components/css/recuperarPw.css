@@ -1,14 +1,13 @@
-.password{
-    max-width: 500px;
-    margin: auto;
-    margin-top: 20px;
-    padding: 10px;
+.password {
+  max-width: 500px;
+  margin: auto;
+  margin-top: 20px;
+  padding: 10px;
 }
-.formPw{
-    height: 200px;     
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    background-color: #bdc3c7 ;
-    
-}   
+.formPw {
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  /*background-color: #bdc3c7 ;*/
+}

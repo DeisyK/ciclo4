@@ -3,15 +3,12 @@ const { decode } = require("../services/token");
 
 exports.list = async (req, res) => {
   try {
-    const user = await decode(req.headers.token);
+    const { _id } = await decode(req.headers.token);
     const contacts = await db.Contactos.find({
-      user_id: user._id,
+      user_id: _id,
     });
-    contacts.length > 0
-      ? res.send(contacts)
-      : res.send({
-          mesagge: "Aún no tiene contactos guardados por el momento.",
-        });
+
+    res.send(contacts);
   } catch (error) {
     res.send({ error: "Error buscando los contactos, intente nuevamente." });
   }
@@ -23,9 +20,29 @@ exports.one = async (req, res) => {
     const contact = await db.Contactos.findOne({
       _id: req.params.id,
     });
-    id === contact.user_id
-      ? res.send(contact)
-      : res.send({ message: "No tiene permisos para ver este contacto" });
+
+    let respuesta = {
+      _id: contact._id,
+      name: contact.name,
+      address: contact.address,
+      birthdate: contact.birthdate,
+      country: contact.country,
+      cellphone: contact.cellphone,
+      notes: contact.notes,
+      email: contact.email,
+      surname: contact.surname,
+      category_id: contact.category_id,
+      user_id: contact._id,
+    };
+    const category = await db.Categorias.findOne({ _id: contact.category_id });
+
+    if (contact) respuesta.categoria = category;
+    console.log(respuesta);
+    contact
+      ? id === contact.user_id
+        ? res.send(respuesta)
+        : res.send({ error: "No tiene permisos para ver este contacto" })
+      : res.send({ error: "Contacto no encontrado" });
   } catch (e) {
     res.send({ error: "Error al buscar el contacto" });
   }
@@ -33,7 +50,7 @@ exports.one = async (req, res) => {
 
 exports.add = async (req, res) => {
   try {
-    const user = await decode(req.headers.token);
+    const { _id } = await decode(req.headers.token);
     const register = await db
       .Contactos({
         name: req.body.name,
@@ -45,7 +62,7 @@ exports.add = async (req, res) => {
         email: req.body.email,
         surname: req.body.surname,
         category_id: req.body.category_id,
-        user_id: user._id,
+        user_id: _id,
       })
       .save();
 

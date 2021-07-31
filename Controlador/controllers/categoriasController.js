@@ -1,10 +1,12 @@
 const db = require("../models/index");
 const { decode } = require("../services/token");
 
-exports.list = async (req, res, next) => {
+exports.list = async (req, res) => {
   try {
-    const { id } = await decode(req.headers.token);
-    const categories = await db.Categorias.find({ id_user: id });
+    //const { id } = await decode(req.headers.token);
+    const categories = await db.Categorias.find();
+    //{ id_user: id })
+
     categories.length > 0
       ? res.send(categories)
       : res.send({ message: "No se encontraron categorias guardadas" });
