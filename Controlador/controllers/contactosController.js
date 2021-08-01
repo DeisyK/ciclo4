@@ -34,10 +34,18 @@ exports.one = async (req, res) => {
       category_id: contact.category_id,
       user_id: contact._id,
     };
-    const category = await db.Categorias.findOne({ _id: contact.category_id });
 
-    if (contact) respuesta.categoria = category;
-    console.log(respuesta);
+    let category = undefined;
+    try {
+      if (respuesta.category_id)
+        category = await db.Categorias.findOne({ _id: contact.category_id });
+    } catch (e) {
+      console.log(e);
+    }
+    if (category) {
+      respuesta.categoria = category;
+    }
+
     contact
       ? id === contact.user_id
         ? res.send(respuesta)
@@ -78,6 +86,7 @@ exports.edit = async (req, res) => {
   try {
     const { id } = await decode(req.headers.token);
     const contact = await db.Contactos.findOne({ _id: req.params.id });
+
     if (contact.user_id === id) {
       const response = await db.Contactos.updateOne(
         {
@@ -86,7 +95,7 @@ exports.edit = async (req, res) => {
         {
           name: req.body.name,
           address: req.body.address,
-          birthdate: req.body.birthdate,
+          birthdate: new Date(req.body.birthdate),
           country: req.body.country,
           cellphone: req.body.cellphone,
           notes: req.body.notes,

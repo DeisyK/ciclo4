@@ -3,15 +3,14 @@ const { decode } = require("../services/token");
 
 exports.list = async (req, res) => {
   try {
-    //const { id } = await decode(req.headers.token);
-    const categories = await db.Categorias.find();
-    //{ id_user: id })
+    const { id } = await decode(req.headers.token);
+    const categories = await db.Categorias.find({ id_user: id });
 
     categories.length > 0
       ? res.send(categories)
-      : res.send({ message: "No se encontraron categorias guardadas" });
+      : res.send({ error: "No se encontraron categorias guardadas" });
   } catch (error) {
-    res.send({ message: "No se encontraron categorias" });
+    res.send({ error: "No se encontraron categorias" });
   }
 };
 
@@ -29,7 +28,7 @@ exports.add = async (req, res, next) => {
 
     res.send(register);
   } catch (error) {
-    res.send({ message: "No se pudo agregar categoria" });
+    res.send({ error: "No se pudo agregar categoria" });
   }
 };
 
