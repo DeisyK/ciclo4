@@ -83,8 +83,16 @@ const DetalleContacto = (props) => {
       <Card
         style={{ width: 500, margin: "auto", marginTop: 16 }}
         actions={[
-          <EditOutlined key="edit" onClick={() => editar()} />,
-          <DeleteFilled key="delete" onClick={() => setVisible(true)} />,
+          <EditOutlined
+            style={{ fontSize: "30px" }}
+            key="edit"
+            onClick={() => editar()}
+          />,
+          <DeleteFilled
+            style={{ fontSize: "30px" }}
+            key="delete"
+            onClick={() => setVisible(true)}
+          />,
         ]}
       >
         <Modal

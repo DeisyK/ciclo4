@@ -72,7 +72,7 @@ export default function App() {
           <DetalleContacto editar={editar} setEditar={setEditar} />
         </Route>
         <Route path="/Contactos">
-          <Contactos />
+          <Contactos editar={editar} setEditar={setEditar} />
         </Route>
         <Route path="/Categorias">
           <Categorias />

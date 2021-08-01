@@ -90,19 +90,19 @@ const EditarPerfil = (props) => {
   const edit = () => {
     if (props.editar) {
       return {
-        ["name"]: props.editar.name ? props.editar.name : "",
-        ["surname"]: props.editar.surname ? props.editar.surname : "",
-        ["cellphone"]: props.editar.cellphone ? props.editar.cellphone : "",
-        ["address"]: props.editar.address ? props.editar.address : "",
-        ["email"]: props.editar.email ? props.editar.email : "",
-        ["notes"]: props.editar.notes ? props.editar.notes : "",
+        ["name"]: props.editar.name ? props.editar.name : null,
+        ["surname"]: props.editar.surname ? props.editar.surname : null,
+        ["cellphone"]: props.editar.cellphone ? props.editar.cellphone : null,
+        ["address"]: props.editar.address ? props.editar.address : null,
+        ["email"]: props.editar.email ? props.editar.email : null,
+        ["notes"]: props.editar.notes ? props.editar.notes : null,
         ["country"]: props.editar.country ? props.editar.country : "Colombia",
         ["category_id"]: props.editar.category_id
           ? props.editar.categoria.name
           : null,
         ["birthdate"]: props.editar.birthdate
           ? moment(props.editar.birthdate, "YYYY-MM-DD")
-          : "",
+          : null,
       };
     }
   };
@@ -189,7 +189,7 @@ const EditarPerfil = (props) => {
           <TextArea style={{ width: 400 }} />
         </Form.Item>
         <Button type="primary" htmlType="submit">
-          {!props.editar ? "Registrar nuevo contacto" : "Editar contacto"}
+          {!props.editar ? "Registrar nuevo contacto" : "Guardar contacto"}
         </Button>
       </Form>
     </Card>
