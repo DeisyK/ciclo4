@@ -60,7 +60,7 @@ const EditarPerfil = (props) => {
         await setTimeout(() => {
           setEditado(false);
         }, 2000);
-        history.push(`${props.editar._id}/detalle-contacto`);
+        history.push(`/${props.editar._id}/detalle-contacto`);
       }
     }
     if (response.data.error) {
@@ -99,9 +99,9 @@ const EditarPerfil = (props) => {
         ["country"]: props.editar.country ? props.editar.country : "Colombia",
         ["category_id"]: props.editar.category_id
           ? props.editar.categoria.name
-          : "Colombia",
+          : null,
         ["birthdate"]: props.editar.birthdate
-          ? moment(props.editar.birthdate, "DD-MM-YYYY")
+          ? moment(props.editar.birthdate, "YYYY-MM-DD")
           : "",
       };
     }
@@ -176,18 +176,13 @@ const EditarPerfil = (props) => {
         </Form.Item>
         <Form.Item label="Categoria" name={"category_id"}>
           <Select style={{ width: 400 }}>
-            <Option></Option>
-            {categorias.length > 0 ? (
-              categorias.map((categoria) => (
-                <Option value={categoria._id} key={categoria._id}>
-                  {categoria.name}
-                </Option>
-              ))
-            ) : (
-              <Option disabled>
-                No tienes categorias para agregar este contacto
-              </Option>
-            )}
+            {categorias.length > 0
+              ? categorias.map((categoria) => (
+                  <Option value={categoria._id} key={categoria._id}>
+                    {categoria.name}
+                  </Option>
+                ))
+              : null}
           </Select>
         </Form.Item>
         <Form.Item label="Notas" name={"notes"}>
