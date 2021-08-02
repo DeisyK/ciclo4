@@ -13,6 +13,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Navbarcomp from "../NavbarComp";
 import Inicio from "./Inicio";
 import DetalleContacto from "./DetalleContacto";
+import AgregarCategoria from "./AgregarCategoria";
+import DetalleCategoria from "./DetalleCategoria";
 
 const Home = () => (
   <div>
@@ -75,9 +77,17 @@ export default function App() {
           <Contactos editar={editar} setEditar={setEditar} />
         </Route>
         <Route path="/Categorias">
-          <Categorias />
+          <Categorias editar={editar} setEditar={setEditar} />
         </Route>
-
+        <Route path="/categoria/agregar">
+          <AgregarCategoria />
+        </Route>
+        <Route path="/categoria/:id/editar">
+          <AgregarCategoria editar={editar} setEditar={setEditar} />
+        </Route>
+        <Route path="/categoria/:id/detalle">
+          <DetalleCategoria editar={editar} setEditar={setEditar} />
+        </Route>
         {/* <PrivateRoute path="/admin" component={Admin} /> */}
       </Switch>
     </div>

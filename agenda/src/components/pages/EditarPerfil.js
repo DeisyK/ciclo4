@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../css/EditarPerfil.css";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { Form, DatePicker, Select, Card, Input, Button, Alert } from "antd";
 import api from "../../assets/utils";
@@ -100,15 +100,17 @@ const EditarPerfil = (props) => {
         ["category_id"]: props.editar.category_id
           ? props.editar.categoria.name
           : null,
-        ["birthdate"]: props.editar.birthdate
-          ? moment(props.editar.birthdate, "YYYY-MM-DD")
-          : null,
+        ["birthdate"]:
+          props.editar.birthdate && !isNaN(props.editar.birthdate)
+            ? moment(props.editar.birthdate, "YYYY-MM-DD")
+            : null,
       };
     }
   };
 
   useEffect(() => {
     init();
+    return () => (props.editar ? props.setEditar(undefined) : null);
   }, []);
   return (
     <Card

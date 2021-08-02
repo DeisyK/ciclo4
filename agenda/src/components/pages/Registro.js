@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { Alert, Card, Form, Input, Button, Select } from "antd";
+import { Alert, Card, Form, Input, Button } from "antd";
 import axios from "axios";
 import "../css/registro.css";
 import api from "../../assets/utils";

@@ -4,7 +4,7 @@ const { decode } = require("../services/token");
 exports.list = async (req, res) => {
   try {
     const { id } = await decode(req.headers.token);
-    const categories = await db.Categorias.find({ id_user: id });
+    const categories = await db.Categorias.find({ user_id: id });
 
     categories.length > 0
       ? res.send(categories)
@@ -17,7 +17,6 @@ exports.list = async (req, res) => {
 exports.add = async (req, res, next) => {
   try {
     const { id } = await decode(req.headers.token);
-
     const register = await db
       .Categorias({
         name: req.body.name,
@@ -34,11 +33,23 @@ exports.add = async (req, res, next) => {
 
 exports.one = async (req, res, next) => {
   try {
+    console.log("aqui vamos");
     const { id } = await decode(req.headers.token);
+    let response = {
+      categoria: null,
+      contactos: null,
+    };
     const find = await db.Categorias.findOne({ _id: req.params.id });
-    id === find.user_id
-      ? res.send(find)
-      : res.send({ error: "No tiene permiso para ver esta categoria" });
+    response.categoria = find;
+    console.log(find);
+    if (id === find.user_id) {
+      const contacts = await db.Contactos.find({ category_id: req.params.id });
+      response.contactos = contacts;
+      console.log(response);
+      res.send(response);
+    } else {
+      res.send({ error: "No tiene permiso para ver esta categoria" });
+    }
   } catch (error) {
     res.send({
       error: `Error al buscar la categoria, por favor intente nuevamente.`,
@@ -83,12 +94,26 @@ exports.destroy = async (req, res, next) => {
         _id: req.params.id,
       });
 
-      response.n > 0
-        ? res.status(200).send({ message: "Categorias eliminada" })
-        : res.send({
-            error:
-              "Error al eliminar la categoria, por favor intente nuevamente.",
-          });
+      if (response.n > 0) {
+        db.Contactos.updateMany(
+          { category_id: req.params.id },
+          { $set: { category_id: null } }
+        )
+          .then((response) =>
+            res.status(200).send({ message: "Categorias eliminada" })
+          )
+          .catch((error) =>
+            res.send({
+              error:
+                "Se eliminó la categoria pero sigue presente en los contactos a los que se le asigno.",
+            })
+          );
+      } else {
+        res.send({
+          error:
+            "Error al eliminar la categoria, por favor intente nuevamente.",
+        });
+      }
     } else {
       res.send({ error: "No tiene permisos para eliminar esta categoria" });
     }

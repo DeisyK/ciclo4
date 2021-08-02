@@ -7,7 +7,6 @@ exports.list = async (req, res) => {
     const contacts = await db.Contactos.find({
       user_id: _id,
     });
-
     res.send(contacts);
   } catch (error) {
     res.send({ error: "Error buscando los contactos, intente nuevamente." });
@@ -95,7 +94,7 @@ exports.edit = async (req, res) => {
         {
           name: req.body.name,
           address: req.body.address,
-          birthdate: new Date(req.body.birthdate),
+          birthdate: req.body.birthdate ? new Date(req.body.birthdate) : null,
           country: req.body.country,
           cellphone: req.body.cellphone,
           notes: req.body.notes,
