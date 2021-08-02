@@ -3,10 +3,16 @@ const nodemailer = require("nodemailer");
 /*DEFINE DESDE QUE MAIL SE ENVIARÁ EL MENSAJE */
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.mailtrap.io",
-  port: 2525,
+  // host: "smtp.mailtrap.io",
+  // port: 2525,
+  // auth: {
+  //   user: "cd33eec1405391",
+  //   pass: "2cac2831d6546d",
+  // },
+  service: "gmail",
+  tls: { rejectUnauthorized: false },
   auth: {
-    user: "cd33eec1405391",
+    user: "bwn.notifications@gmail.com",
     pass: "2cac2831d6546d",
   },
 });
@@ -40,7 +46,7 @@ exports.register = async (user, password) => {
 
   /*DEFINE DESDE DONDE SE ENVIARÁ EL MAIL Y HACIA DONDE, TAMBIÉN PONE EL CUERPO DEL MAIL PERVIAMENTE INSTANCIADO */
   const mailOptions = {
-    from: "'sucess-noreply' <bwn.notifications@gmail.com>",
+    from: "<bwn.notifications@gmail.com>",
     to: email,
     subject: "Registro exitoso!!!",
     html: contentHTML,
@@ -48,9 +54,12 @@ exports.register = async (user, password) => {
 
   /*ENVIA EL MAIL */
 
-  await transporter.sendMail(mailOptions);
-
-  return true;
+  const response = await transporter.sendMail(mailOptions);
+  if (response.messageId) {
+    return true;
+  } else {
+    return false;
+  }
 };
 
 exports.recoveryPassword = async (user, password) => {
@@ -88,7 +97,10 @@ exports.recoveryPassword = async (user, password) => {
 
   /*ENVIA EL MAIL */
 
-  await transporter.sendMail(mailOptions);
-
-  return true;
+  const response = await transporter.sendMail(mailOptions);
+  if (response.messageId) {
+    return true;
+  } else {
+    return false;
+  }
 };

@@ -99,7 +99,8 @@ exports.recovery = async (req, res, next) => {
     );
     if (response.n === 1) {
       const one = await db.User.findOne({ email: req.body.email });
-      mailOk = sendEmails.recoveryPassword(one, password);
+      mailOk = await sendEmails.recoveryPassword(one, password);
+
       if (mailOk) {
         res.send({
           message: "Contraseña cambiada, revise su correo electronico.",

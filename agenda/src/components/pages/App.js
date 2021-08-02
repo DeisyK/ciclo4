@@ -80,18 +80,18 @@ const App = () => {
       return <Redirect to={"/login"} />;
     }
   };
+  const NoAuthRoutes = () => {
+    return !usuario ? <></> : <Redirect to={"/login"} />;
+  };
 
   const Rutas = () => (
     <div>
       <Switch>
         <Route exact path="/" component={Inicio} />
-        {usuario ? (
-          <Route path="/login">
-            <Login token={token} setToken={setToken} />
-          </Route>
-        ) : (
-          <Redirect to={"/"} />
-        )}
+        <Route path="/login">
+          <Login token={token} setToken={setToken} />
+        </Route>
+
         <Route path="/RecuperarPw">
           <RecuperarPw />
         </Route>
