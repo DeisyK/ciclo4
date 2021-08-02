@@ -49,6 +49,7 @@ const Barra = (props) => {
                 localStorage.removeItem("login");
                 props.setToken(null);
                 props.setUsuario(undefined);
+                history.push("/login");
               }}
             >
               Cerrar sesión
@@ -85,15 +86,20 @@ const Barra = (props) => {
                 key="6"
                 icon={<EditOutlined />}
                 onClick={() => {
-                  props.setEditar(props.usuario);
-                  console.log(props.editar);
+                  const user = props.usuario;
+                  props.setEditar(user);
+
                   history.push("/perfil/editar");
                 }}
               >
                 Editar perfil
               </Menu.Item>
 
-              <Menu.Item key="7" icon={<KeyOutlined />}>
+              <Menu.Item
+                key="7"
+                icon={<KeyOutlined />}
+                onClick={() => history.push("/perfil/password")}
+              >
                 Editar contraseña
               </Menu.Item>
             </SubMenu>

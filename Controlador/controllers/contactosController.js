@@ -38,9 +38,7 @@ exports.one = async (req, res) => {
     try {
       if (respuesta.category_id)
         category = await db.Categorias.findOne({ _id: contact.category_id });
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (e) {}
     if (category) {
       respuesta.categoria = category;
     }

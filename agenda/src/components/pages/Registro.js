@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, BrowserRouter } from "react-router-dom";
 import { Alert, Card, Form, Input, Button } from "antd";
 import axios from "axios";
 import "../css/registro.css";
@@ -9,20 +9,23 @@ import token from "../../assets/token";
 const Registro = (props) => {
   const [message, setMessage] = useState(undefined);
   const [error, setError] = useState(undefined);
+  const [loading, setLoading] = useState(false);
   const history = useHistory();
   const onFinish = async (values) => {
     try {
+      setLoading(true);
       if (!props.editar) {
         const response = await axios.post(`${api}login/register`, {
           email: values.email,
           name: values.name,
         });
+        setLoading(false);
         if (response.data.message) {
           setMessage(response.data.message);
           setTimeout(() => {
             setMessage(undefined);
             history.push("/Login");
-          }, 3000);
+          }, 1000);
         }
         if (response.data.error) {
           setError(response.data.error);
@@ -34,13 +37,13 @@ const Registro = (props) => {
           { email: values.email, name: values.name },
           { headers: { token: token.getToken() } }
         );
-        if (response.data.message) {
+        setLoading(false);
+        if (response.data.token) {
           setMessage(response.data.message);
-          token.removeToken();
           token.setToken(response.data.token);
+          props.setToken(response.data.token);
           setTimeout(() => {
-            props.setUsuario(undefined);
-            history.push("/Login");
+            history.push("/");
           }, 3000);
         }
         if (response.data.error) {
@@ -65,25 +68,47 @@ const Registro = (props) => {
     }
   };
   useEffect(() => {
-    return props.setEditar(undefined);
+    return (
+      props.setEditar ? props.setEditar(undefined) : null,
+      setMessage(undefined),
+      setError(undefined)
+    );
   }, []);
 
   return (
-    <Card className="password">
-      <Form
-        className="formPw"
-        name="basic"
-        labelCol={{
-          span: 4,
-        }}
-        wrapperCol={{
-          span: 19,
-        }}
-        initialValues={edit()}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
+    <Form
+      className="formPw"
+      name="basic"
+      labelCol={{
+        span: 4,
+      }}
+      wrapperCol={{
+        span: 19,
+      }}
+      initialValues={edit()}
+      onFinish={onFinish}
+      onFinishFailed={onFinishFailed}
+      style={{ margin: "auto", marginTop: 100 }}
+    >
+      <Card
+        style={{ width: "700px" }}
+        className="password"
+        title={props.editar ? "Editar perfil" : "Registro"}
+        actions={[
+          <Button type="primary" htmlType="submit" loading={loading}>
+            {props.editar ? "Editar perfil" : "Registrarse"}
+          </Button>,
+
+          <Button
+            type="reset"
+            htmlType="reset"
+            onClick={() => history.goBack()}
+            loading={loading}
+          >
+            ← Volver
+          </Button>,
+        ]}
       >
-        <h4>{props.editar ? "Editar perfil" : "Registro"}</h4>
         {message ? <Alert message={message} type="success" /> : null}
         {error ? <Alert message={error} type="error" /> : null}
         <Form.Item
@@ -110,21 +135,8 @@ const Registro = (props) => {
         >
           <Input />
         </Form.Item>
-
-        <Button type="primary" htmlType="submit">
-          {props.editar ? "Editar perfil" : "Registrarse"}
-        </Button>
-        {props.editar ? null : (
-          <Button
-            type="reset"
-            htmlType="reset"
-            onClick={() => history.push("/Login")}
-          >
-            ← Volver
-          </Button>
-        )}
-      </Form>
-    </Card>
+      </Card>
+    </Form>
   );
 };
 

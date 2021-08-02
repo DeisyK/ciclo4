@@ -33,7 +33,6 @@ exports.add = async (req, res, next) => {
 
 exports.one = async (req, res, next) => {
   try {
-    console.log("aqui vamos");
     const { id } = await decode(req.headers.token);
     let response = {
       categoria: null,
@@ -41,11 +40,9 @@ exports.one = async (req, res, next) => {
     };
     const find = await db.Categorias.findOne({ _id: req.params.id });
     response.categoria = find;
-    console.log(find);
     if (id === find.user_id) {
       const contacts = await db.Contactos.find({ category_id: req.params.id });
       response.contactos = contacts;
-      console.log(response);
       res.send(response);
     } else {
       res.send({ error: "No tiene permiso para ver esta categoria" });

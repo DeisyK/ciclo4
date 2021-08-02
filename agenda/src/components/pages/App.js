@@ -19,14 +19,17 @@ import Barra from "./Barra";
 import toke from "../../assets/token";
 import axios from "axios";
 import api from "../../assets/utils";
+import CambiarPassword from "./CambiarPassword";
 
 const App = () => {
   const [token, setToken] = useState(null);
-  const [cargarndoUsuario, setCargandoUsuario] = useState(true);
   const [editar, setEditar] = useState(undefined);
   const [usuario, setUsuario] = useState(undefined);
   const [errores, setErrores] = useState(undefined);
-
+  const logout = () => {
+    setToken(null);
+    setUsuario(undefined);
+  };
   const Rutas = () => (
     <div>
       <Switch>
@@ -43,7 +46,7 @@ const App = () => {
           <Registro />
         </Route>
         <Route path="/perfil/editar">
-          <Registro editar={editar} setEditar={setEditar} />
+          <Registro editar={editar} setEditar={setEditar} setToken={setToken} />
         </Route>
         <Route path="/Miperfil">
           <Miperfil />
@@ -53,8 +56,7 @@ const App = () => {
             editar={editar}
             setEditar={setEditar}
             token={token}
-            setUsuario={setUsuario}
-          />
+          ></EditarPerfil>
         </Route>
         <Route path="/crear-contacto">
           <EditarPerfil />
@@ -76,6 +78,13 @@ const App = () => {
         </Route>
         <Route path="/categoria/:id/detalle">
           <DetalleCategoria editar={editar} setEditar={setEditar} />
+        </Route>
+        <Route>
+          <CambiarPassword
+            path="/perfil/password"
+            setToken={setToken}
+            setUsuario={setUsuario}
+          />
         </Route>
         {/* <PrivateRoute path="/admin" component={Admin} /> */}
       </Switch>

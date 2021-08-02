@@ -107,7 +107,6 @@ const Contactos = (props) => {
       const response = await axios.get(`${api}contactos/list`, {
         headers: { token: token.getToken("login") },
       });
-      console.log(response);
 
       if (response.data.error) {
         setError(response.data.error);

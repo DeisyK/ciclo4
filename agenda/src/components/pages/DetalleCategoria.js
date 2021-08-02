@@ -26,9 +26,7 @@ const DetalleCategoria = (props) => {
       if (response.data.error) setErrores(response.data.error);
       if (response.data.categoria) setData(response.data);
       setLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   const handleOk = async () => {
     setConfirmLoading(true);

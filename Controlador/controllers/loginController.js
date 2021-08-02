@@ -9,7 +9,6 @@ const { decode } = require("../services/token");
 exports.usuario = async (req, res) => {
   try {
     const usuario = await decode(req.headers.token);
-    console.log("Error");
     if (usuario) {
       res.send({ _id: usuario._id, email: usuario.email, name: usuario.name });
     } else {
@@ -53,8 +52,6 @@ exports.register = async (req, res, next) => {
     if (resultValidation.errors.length > 0) {
       res.send({ errors: resultValidation.mapped() });
     }
-
-    // const password = "12345678";
     const password = generator.generate({
       length: 10,
       numbers: true,
@@ -89,13 +86,11 @@ exports.recovery = async (req, res, next) => {
     if (resultValidation.errors.length > 0) {
       res.send({ errors: resultValidation.mapped() });
     }
-
     let mailOk = false;
-    const password = "12345678";
-    // const password = generator.generate({
-    //   length: 10,
-    //   numbers: true,
-    // });
+    const password = generator.generate({
+      length: 10,
+      numbers: true,
+    });
     const salt = bcrypt.genSaltSync(8);
 
     const response = await db.User.updateOne(
@@ -122,6 +117,38 @@ exports.recovery = async (req, res, next) => {
   }
 };
 
+exports.change = async (req, res) => {
+  try {
+    if (req.body.newPassword === req.body.confirmPassword) {
+      const user = await decode(req.headers.token);
+      if (user) {
+        const isTrue = bcrypt.compareSync(req.body.oldPassword, user.password);
+        if (isTrue) {
+          const salt = bcrypt.genSaltSync(8);
+          const response = await db.User.updateOne(
+            { _id: user._id },
+            { password: bcrypt.hashSync(req.body.newPassword, salt) }
+          );
+          if (response.n > 0) {
+            res.send({
+              message:
+                "Contraseña cambiada con exito, por favor inicie sesión nuevamente.",
+            });
+          } else {
+            res.send({ error: "Intente nuevamente" });
+          }
+        } else {
+          res.send({ error: "Revise la contraseña actual" });
+        }
+      } else {
+        res.send({ error: "Sin permisos para ejecutar esta acción" });
+      }
+    } else {
+      res.send({ error: "Las contraseñas deben coincidir" });
+    }
+  } catch (e) {}
+};
+
 exports.edit = async (req, res) => {
   try {
     const { id } = await decode(req.headers.token);
@@ -132,8 +159,11 @@ exports.edit = async (req, res) => {
       );
 
       if (response.n > 0) {
+        const register = await db.User.findOne({ _id: req.params.id });
+        const token = tokenServices.encodeUser(register);
         res.send({
-          message: "Usuario actualizado, vulva a iniciar sesión",
+          token: token,
+          message: "Usuario actualizado.",
         });
       } else {
         res.send({ error: "No se pudo actualizar tu perfil." });
