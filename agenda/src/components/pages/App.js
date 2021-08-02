@@ -10,47 +10,28 @@ import Categorias from "./Categorias";
 
 import PrivateRoute from "./PrivateRoute";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Navbarcomp from "../NavbarComp";
+import Navbarcomp from "./NavbarComp";
 import Inicio from "./Inicio";
 import DetalleContacto from "./DetalleContacto";
 import AgregarCategoria from "./AgregarCategoria";
 import DetalleCategoria from "./DetalleCategoria";
+import Barra from "./Barra";
+import toke from "../../assets/token";
+import axios from "axios";
+import api from "../../assets/utils";
 
-const Home = () => (
-  <div>
-    <Inicio />
-  </div>
-);
-// const Admin = () => (
-//  <div>
-//  <Contactos/>
-//  </div>
-// );
-
-export default function App() {
+const App = () => {
   const [token, setToken] = useState(null);
   const [cargarndoUsuario, setCargandoUsuario] = useState(true);
   const [editar, setEditar] = useState(undefined);
-  useEffect(() => {
-    if (!localStorage.getItem("login")) {
-      setCargandoUsuario(false);
-      return;
-    } else {
-      setToken(localStorage.getItem("login"));
-      setCargandoUsuario(true);
-      return;
-    }
-  });
-  return (
+  const [usuario, setUsuario] = useState(undefined);
+  const [errores, setErrores] = useState(undefined);
+
+  const Rutas = () => (
     <div>
-      <nav>
-        <div>
-          <Navbarcomp token={token} setToken={setToken} />
-        </div>
-      </nav>
       <Switch>
         <Route exact path="/">
-          <Home />
+          <Inicio />
         </Route>
         <Route path="/login">
           <Login token={token} setToken={setToken} />
@@ -61,11 +42,19 @@ export default function App() {
         <Route path="/Registro">
           <Registro />
         </Route>
+        <Route path="/perfil/editar">
+          <Registro editar={editar} setEditar={setEditar} />
+        </Route>
         <Route path="/Miperfil">
           <Miperfil />
         </Route>
         <Route path="/EditarPerfil/:id">
-          <EditarPerfil editar={editar} setEditar={setEditar} />
+          <EditarPerfil
+            editar={editar}
+            setEditar={setEditar}
+            token={token}
+            setUsuario={setUsuario}
+          />
         </Route>
         <Route path="/crear-contacto">
           <EditarPerfil />
@@ -92,4 +81,44 @@ export default function App() {
       </Switch>
     </div>
   );
-}
+  const init = async () => {
+    if (toke.getToken()) {
+      try {
+        const response = await axios.get(`${api}login/get-usuario`, {
+          headers: { token: toke.getToken() },
+        });
+        if (response.data._id) {
+          setUsuario(response.data);
+        }
+        if (response.data.error) {
+          setErrores(response.data.error);
+          setTimeout(() => setErrores(undefined), 5000);
+        }
+      } catch (e) {
+        setErrores(e);
+      }
+    }
+  };
+
+  useEffect(() => {
+    init();
+  }, []);
+  useEffect(() => {
+    init();
+  }, [token]);
+
+  return (
+    <Barra
+      rutas={Rutas}
+      usuario={usuario}
+      setUsuario={setUsuario}
+      token={token}
+      setToken={setToken}
+      errores={errores}
+      setErrores={setErrores}
+      editar={editar}
+      setEditar={setEditar}
+    />
+  );
+};
+export default App;

@@ -5,6 +5,7 @@ import { Form, Input, Button, Alert } from "antd";
 import "../css/login.css";
 import api from "../../assets/utils";
 import axios from "axios";
+import token from "../../assets/token";
 
 const Login = (props) => {
   const [errores, setErrores] = useState(undefined);
@@ -22,9 +23,9 @@ const Login = (props) => {
       }, 7000);
     }
     if (response.data.token) {
-      localStorage.setItem("login", response.data.token);
+      token.setToken(response.data.token);
       props.setToken(response.data.token);
-      history.push("/Miperfil");
+      history.push("/");
     }
   };
 

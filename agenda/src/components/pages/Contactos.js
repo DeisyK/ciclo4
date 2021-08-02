@@ -161,7 +161,7 @@ const Contactos = (props) => {
             type="primary"
             onClick={() => history.push("/crear-contacto")}
           >
-            Agregar Nuevo
+            Agregar contacto
           </Button>
         ) : null}
 

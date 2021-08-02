@@ -1,7 +1,8 @@
 import React from "react";
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import "./css/login.css";
+import token from "../../assets/token";
+import "../css/login.css";
 
 const Navbarcomp = (props) => {
   return (
@@ -47,7 +48,7 @@ const Navbarcomp = (props) => {
                 <Nav.Link
                   href="/"
                   onClick={() => {
-                    localStorage.removeItem("login");
+                    token.removeToken();
                     props.setToken(null);
                   }}
                 >

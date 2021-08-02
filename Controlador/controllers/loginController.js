@@ -4,6 +4,23 @@ const generator = require("generate-password");
 const sendEmails = require("../services/emails");
 const { validationResult } = require("express-validator");
 const db = require("../models/index");
+const { decode } = require("../services/token");
+
+exports.usuario = async (req, res) => {
+  try {
+    const usuario = await decode(req.headers.token);
+    console.log("Error");
+    if (usuario) {
+      res.send({ _id: usuario._id, email: usuario.email, name: usuario.name });
+    } else {
+      res.send({ error: "El usuario no existe, por favor cree una cuenta" });
+    }
+  } catch (e) {
+    res.send({
+      error: "Error al buscar su usuario, por favor intente nuevamente",
+    });
+  }
+};
 
 exports.login = async (req, res, next) => {
   try {
@@ -18,7 +35,6 @@ exports.login = async (req, res, next) => {
 
       if (isTrue) {
         const token = tokenServices.encodeUser(register);
-
         res.send({ token });
       } else {
         res.send({ error: "Revise email y contraseña" });
@@ -103,5 +119,29 @@ exports.recovery = async (req, res, next) => {
     res.send({
       error: "No se pudo recuperar la contraseña, por favor intente nuevamente",
     });
+  }
+};
+
+exports.edit = async (req, res) => {
+  try {
+    const { id } = await decode(req.headers.token);
+    if (id === req.params.id) {
+      const response = await db.User.updateOne(
+        { _id: req.params.id },
+        { name: req.body.name, email: req.body.email }
+      );
+
+      if (response.n > 0) {
+        res.send({
+          message: "Usuario actualizado, vulva a iniciar sesión",
+        });
+      } else {
+        res.send({ error: "No se pudo actualizar tu perfil." });
+      }
+    } else {
+      res.send({ error: "No tienes permisos para editar el usuario." });
+    }
+  } catch (error) {
+    res.send({ error: "No se pudo actualizar tu perfil." });
   }
 };
