@@ -53,7 +53,6 @@ function Inicio() {
         <img
           src="https://i.ibb.co/KWChTk2/Whats-App-Image-2021-07-12-at-6-19-40-PM.jpg"
           width="300"
-          height="100"
           alt="logo"
         />
         <Card.Body>
@@ -69,12 +68,7 @@ function Inicio() {
       <CardGroup>
         {integrantes.map((integrante, i) => (
           <Card className="tarjetaPersonal" key={i}>
-            <Card.Img
-              variant="top"
-              src={integrante.foto}
-              width="100"
-              height="250"
-            />
+            <Card.Img variant="top" src={integrante.foto} width="100" />
             <Card.Body>
               <Card.Title>{integrante.nombre}</Card.Title>
               <Card.Text>{integrante.rol}</Card.Text>

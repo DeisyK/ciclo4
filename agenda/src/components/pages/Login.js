@@ -30,7 +30,6 @@ const Login = (props) => {
     if (response.data.token) {
       token.setToken(response.data.token);
       props.setToken(response.data.token);
-
       history.push("/");
     }
   };
