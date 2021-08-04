@@ -153,7 +153,6 @@ const Categorias = (props) => {
         ) : null}
         <Table columns={columns} dataSource={data} scroll={{ x: 1300 }} />
       </Card>
-      )
     </div>
   );
 };

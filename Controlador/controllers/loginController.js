@@ -176,3 +176,9 @@ exports.edit = async (req, res) => {
     res.send({ error: "No se pudo actualizar tu perfil." });
   }
 };
+
+exports.destroy = async (req, res) => {
+  try {
+    res.send;
+  } catch (e) {}
+};
