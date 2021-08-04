@@ -80,9 +80,6 @@ const App = () => {
       return <Redirect to={"/login"} />;
     }
   };
-  const NoAuthRoutes = () => {
-    return !usuario ? <></> : <Redirect to={"/login"} />;
-  };
 
   const Rutas = () => (
     <div>
@@ -118,7 +115,8 @@ const App = () => {
           setTimeout(() => setErrores(undefined), 5000);
         }
       } catch (e) {
-        setErrores(e);
+        toke.removeToken();
+        console.log(e);
       }
     }
   };

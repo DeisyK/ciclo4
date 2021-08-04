@@ -9,5 +9,6 @@ router.post("/register", loginController.register);
 router.patch("/recovery", loginController.recovery);
 router.patch("/change/password", loginController.change);
 router.patch("/:id/edit", verifyUsuario, loginController.edit);
+router.delete("/:id/destroy", verifyUsuario, loginController.destroy);
 
 module.exports = router;

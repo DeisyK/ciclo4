@@ -98,7 +98,7 @@ const EditarPerfil = (props) => {
         ["notes"]: props.editar.notes ? props.editar.notes : null,
         ["country"]: props.editar.country ? props.editar.country : "Colombia",
         ["category_id"]: props.editar.category_id
-          ? props.editar.categoria.name
+          ? props.editar.category_id
           : null,
         ["birthdate"]:
           props.editar.birthdate && !isNaN(props.editar.birthdate)
@@ -110,6 +110,8 @@ const EditarPerfil = (props) => {
 
   useEffect(() => {
     init();
+  }, []);
+  useEffect(() => {
     return () => (props.editar ? props.setEditar(undefined) : null);
   }, []);
   return (

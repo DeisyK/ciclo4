@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, BrowserRouter } from "react-router-dom";
-import { Alert, Card, Form, Input, Button } from "antd";
+import { Alert, Card, Form, Input, Button, Modal } from "antd";
 import axios from "axios";
 import "../css/registro.css";
 import api from "../../assets/utils";
@@ -10,6 +10,9 @@ const Registro = (props) => {
   const [message, setMessage] = useState(undefined);
   const [error, setError] = useState(undefined);
   const [loading, setLoading] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+
   const history = useHistory();
   const onFinish = async (values) => {
     try {
@@ -52,8 +55,33 @@ const Registro = (props) => {
         }
       }
     } catch (error) {
-      setError(error);
+      console.log(error);
     }
+  };
+  const handleOk = async () => {
+    setConfirmLoading(true);
+    const response = await axios.delete(
+      `${api}login/${props.editar._id}/destroy`,
+      {
+        headers: { token: token.getToken() },
+      }
+    );
+    if (response.data.message) {
+      setMessage(response.data.message);
+      setTimeout(() => {
+        history.push("/login");
+      }, 3000);
+    }
+    if (response.data.error) {
+      setError(response.data.error);
+      setTimeout(() => {
+        setError(undefined);
+      }, 3000);
+    }
+    setVisible(false);
+  };
+  const handleCancel = () => {
+    setVisible(false);
   };
   const onFinishFailed = (errorInfo) => {
     setError("Error: debe ingresar un email.");
@@ -67,12 +95,13 @@ const Registro = (props) => {
       };
     }
   };
+
   useEffect(() => {
-    return (
-      props.setEditar ? props.setEditar(undefined) : null,
-      setMessage(undefined),
-      setError(undefined)
-    );
+    return () => {
+      props.setEditar(undefined);
+      setMessage(undefined);
+      setError(undefined);
+    };
   }, []);
 
   return (
@@ -90,6 +119,32 @@ const Registro = (props) => {
       onFinishFailed={onFinishFailed}
       style={{ margin: "auto", marginTop: 100 }}
     >
+      {" "}
+      <Modal
+        title="Eliminar"
+        visible={visible}
+        onOk={handleOk}
+        confirmLoading={confirmLoading}
+        onCancel={handleCancel}
+      >
+        {" "}
+        <Form.Item
+          label="Contraseña"
+          name="password"
+          rules={[
+            {
+              required: true,
+              message: "Ingrese una contraseña",
+            },
+          ]}
+        >
+          <Input.Password />
+        </Form.Item>
+        <p>
+          Si eliminar tu cuenta todos tus contactos, categorias e información
+          también será eliminados y no se podrán recuperar.
+        </p>
+      </Modal>
       <Card
         style={{ width: "700px" }}
         className="password"
@@ -107,6 +162,17 @@ const Registro = (props) => {
           >
             ← Volver
           </Button>,
+          props.editar ? (
+            <Button
+              danger
+              type="primary"
+              htmlType="reset"
+              onClick={() => setVisible(true)}
+              loading={loading}
+            >
+              Eliminar cuenta
+            </Button>
+          ) : null,
         ]}
       >
         {message ? <Alert message={message} type="success" /> : null}

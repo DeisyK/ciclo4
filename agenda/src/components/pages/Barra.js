@@ -88,7 +88,6 @@ const Barra = (props) => {
                 onClick={() => {
                   const user = props.usuario;
                   props.setEditar(user);
-
                   history.push("/perfil/editar");
                 }}
               >
