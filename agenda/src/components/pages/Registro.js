@@ -45,9 +45,8 @@ const Registro = (props) => {
           setMessage(response.data.message);
           token.setToken(response.data.token);
           props.setToken(response.data.token);
-          setTimeout(() => {
-            history.push("/");
-          }, 3000);
+
+          history.push("/");
         }
         if (response.data.error) {
           setError(response.data.error);
@@ -68,9 +67,10 @@ const Registro = (props) => {
     );
     if (response.data.message) {
       setMessage(response.data.message);
-      setTimeout(() => {
-        history.push("/login");
-      }, 3000);
+      props.setToken(null);
+      props.setUsuario(undefined);
+      token.removeToken();
+      history.push("/login");
     }
     if (response.data.error) {
       setError(response.data.error);
@@ -98,7 +98,9 @@ const Registro = (props) => {
 
   useEffect(() => {
     return () => {
-      props.setEditar(undefined);
+      if (props.editar) {
+        props.setEditar(undefined);
+      }
       setMessage(undefined);
       setError(undefined);
     };
@@ -124,22 +126,10 @@ const Registro = (props) => {
         title="Eliminar"
         visible={visible}
         onOk={handleOk}
+        onFinish={onFinish}
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
       >
-        {" "}
-        <Form.Item
-          label="Contraseña"
-          name="password"
-          rules={[
-            {
-              required: true,
-              message: "Ingrese una contraseña",
-            },
-          ]}
-        >
-          <Input.Password />
-        </Form.Item>
         <p>
           Si eliminar tu cuenta todos tus contactos, categorias e información
           también será eliminados y no se podrán recuperar.

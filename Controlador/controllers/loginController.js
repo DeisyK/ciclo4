@@ -52,29 +52,36 @@ exports.register = async (req, res, next) => {
     if (resultValidation.errors.length > 0) {
       res.send({ errors: resultValidation.mapped() });
     }
-    const password = generator.generate({
-      length: 10,
-      numbers: true,
-    });
-    const salt = bcrypt.genSaltSync(8);
+    const register = await db.User.findOne({ email: req.body.email });
+    if (!register) {
+      const password = generator.generate({
+        length: 10,
+        numbers: true,
+      });
+      const salt = bcrypt.genSaltSync(8);
 
-    const register = await db
-      .User({
-        name: req.body.name,
-        email: req.body.email,
-        password: bcrypt.hashSync(password, salt),
-      })
-      .save();
+      const register = await db
+        .User({
+          name: req.body.name,
+          email: req.body.email,
+          password: bcrypt.hashSync(password, salt),
+        })
+        .save();
+      console.log(register);
+      const mailOk = await sendEmails.register(register, password);
 
-    const mailOk = await sendEmails.register(register, password);
-
-    mailOk
-      ? res
-          .status(200)
-          .send({ message: "Registro creado con exito, revise su correo." })
-      : res.send({
-          Error: "No se pudo realizar el registro intente nuevamente",
-        });
+      mailOk
+        ? res
+            .status(200)
+            .send({ message: "Registro creado con exito, revise su correo." })
+        : res.send({
+            Error: "No se pudo realizar el registro intente nuevamente",
+          });
+    } else {
+      res.send({
+        error: "Por favor ingrese un correo que no haya sido registrado",
+      });
+    }
   } catch (e) {
     res.send({ Error: "No se pudo crear usuario" });
   }
@@ -179,6 +186,12 @@ exports.edit = async (req, res) => {
 
 exports.destroy = async (req, res) => {
   try {
-    res.send;
-  } catch (e) {}
+    const { id } = await decode(req.headers.token);
+    await db.Categorias.deleteMany({ user_id: id });
+    await db.Contactos.deleteMany({ user_id: id });
+    await db.User.deleteOne({ _id: id });
+    res.send({ message: "Cuenta eliminada" });
+  } catch (e) {
+    res.send({ error: "Error al eliminar la cuenta." });
+  }
 };

@@ -34,6 +34,7 @@ const App = () => {
               setEditar={setEditar}
               setToken={setToken}
               usuario={usuario}
+              setUsuario={setUsuario}
             />
           </Route>
           <Route path="/Miperfil" component={Miperfil}>
