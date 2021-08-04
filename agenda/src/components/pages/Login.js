@@ -1,30 +1,36 @@
 import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import "antd/dist/antd.css";
-import { Form, Input, Button, Alert } from "antd";
+import { Form, Input, Button, Alert, Card } from "antd";
 import "../css/login.css";
 import api from "../../assets/utils";
 import axios from "axios";
+import token from "../../assets/token";
 
 const Login = (props) => {
   const [errores, setErrores] = useState(undefined);
+  const [loading, setLoading] = useState(false);
 
   const history = useHistory();
   const onFinish = async (values) => {
+    setLoading(true);
     const response = await axios.post(`${api}login/into`, {
       email: values.email,
       password: values.password,
     });
+    setLoading(false);
     if (response.data.error) {
       setErrores(response.data.error);
+      setLoading(false);
+
       setTimeout(() => {
         setErrores(undefined);
       }, 7000);
     }
     if (response.data.token) {
-      localStorage.setItem("login", response.data.token);
+      token.setToken(response.data.token);
       props.setToken(response.data.token);
-      history.push("/Miperfil");
+      history.push("/");
     }
   };
 
@@ -48,53 +54,53 @@ const Login = (props) => {
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
       >
-        <Form.Item
-          name={"email"}
-          label="Email"
-          rules={[
-            {
-              type: "email",
-              required: true,
-              message: "Ingrese un email valido",
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-
-        <Form.Item
-          label="Password"
-          name="password"
-          rules={[
-            {
-              required: true,
-              message: "Ingrese una contraseña",
-            },
-          ]}
-        >
-          <Input.Password />
-        </Form.Item>
-
-        <Form.Item
-          wrapperCol={{
-            offset: 8,
-            span: 16,
-          }}
-        >
-          <div className="botones-login">
-            <Button type="primary" htmlType="submit">
+        <Card
+          title="Iniciar sesión"
+          actions={[
+            <Button type="primary" htmlType="submit" loading={loading}>
               Iniciar sesión
-            </Button>
-            <Button onClick={() => history.push("/RecuperarPw")}>
+            </Button>,
+            <Button
+              onClick={() => history.push("/RecuperarPw")}
+              loading={loading}
+            >
               Olvidé mi contraseña
-            </Button>
-            <Button onClick={() => history.push("/Registro")}>
+            </Button>,
+            <Button onClick={() => history.push("/Registro")} loading={loading}>
               Registrarme!!
-            </Button>
-          </div>
-        </Form.Item>
+            </Button>,
+          ]}
+        >
+          <Form.Item
+            name={"email"}
+            label="Email"
+            rules={[
+              {
+                type: "email",
+                required: true,
+                message: "Ingrese un email valido",
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            label="Password"
+            name="password"
+            rules={[
+              {
+                required: true,
+                message: "Ingrese una contraseña",
+              },
+            ]}
+          >
+            <Input.Password />
+          </Form.Item>
+
+          {errores ? <Alert message={errores} type="error" /> : null}
+        </Card>
       </Form>
-      {errores ? <Alert message={errores} type="error" /> : null}
     </div>
   );
 };

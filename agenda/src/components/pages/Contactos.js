@@ -45,7 +45,10 @@ const Contactos = (props) => {
       fixed: "right",
       width: 300,
       render: (contacto) => (
-        <div style={{ display: "flex", justifyContent: "space-around" }}>
+        <div
+          style={{ display: "flex", justifyContent: "space-around" }}
+          key={contacto._id}
+        >
           <Link
             style={{ textDecoration: "none" }}
             to={`/${contacto._id}/detalle-contacto`}
@@ -90,6 +93,7 @@ const Contactos = (props) => {
         }
         if (response.data.message) {
           setMessage(response.data.message);
+          setData([]);
           init();
           setTimeout(() => setMessage(undefined), 5000);
         }
@@ -99,28 +103,33 @@ const Contactos = (props) => {
     setVisible(false);
   };
   const init = async () => {
-    const response = await axios.get(`${api}contactos/list`, {
-      headers: { token: token.getToken("login") },
-    });
-
-    if (response.data.error) {
-      setError(response.data.error);
-      setTimeout(() => setError(undefined), 5000);
-    }
-    if (response.data.length > 0) {
-      response.data.map((contact) => {
-        contact.birthdate = new Date(contact.birthdate).toLocaleDateString();
-        const edad =
-          new Date().getFullYear() - new Date(contact.birthdate).getFullYear();
-        contact.age = contact.birthdate
-          ? !isNaN(edad)
-            ? edad
-            : "Sin datos"
-          : "Sin datos";
-        return contact;
+    if (!props.data) {
+      const response = await axios.get(`${api}contactos/list`, {
+        headers: { token: token.getToken("login") },
       });
 
-      setData(response.data);
+      if (response.data.error) {
+        setError(response.data.error);
+        setTimeout(() => setError(undefined), 5000);
+      }
+      if (response.data.length > 0) {
+        response.data.map((contact) => {
+          contact.birthdate = new Date(contact.birthdate).toLocaleDateString();
+          const edad =
+            new Date().getFullYear() -
+            new Date(contact.birthdate).getFullYear();
+          contact.age = contact.birthdate
+            ? !isNaN(edad)
+              ? edad
+              : "Sin datos"
+            : "Sin datos";
+          return contact;
+        });
+
+        setData(response.data);
+      }
+    } else {
+      setData(props.data);
     }
     loading();
   };
@@ -145,19 +154,22 @@ const Contactos = (props) => {
         } de los contactos.`}</p>
       </Modal>
       <Card>
-        <Button
-          style={{ marginBottom: 10 }}
-          type="primary"
-          onClick={() => history.push("/crear-contacto")}
-        >
-          Agregar Nuevo
-        </Button>
-        {data.length === 0 ? (
+        {!props.data ? (
+          <Button
+            style={{ marginBottom: 10 }}
+            type="primary"
+            onClick={() => history.push("/crear-contacto")}
+          >
+            Agregar contacto
+          </Button>
+        ) : null}
+
+        {data && data.length === 0 ? (
           <Alert
             style={{ marginBottom: 10 }}
             type="info"
             message="Aun no tienes contactos registrados"
-          ></Alert>
+          />
         ) : null}
         {error ? (
           <Alert
@@ -171,7 +183,6 @@ const Contactos = (props) => {
         ) : null}
         <Table columns={columns} dataSource={data} scroll={{ x: 1300 }} />
       </Card>
-      )
     </div>
   );
 };

@@ -22,7 +22,7 @@ const DetalleContacto = (props) => {
       const response = await axios.get(url, {
         headers: { token: token.getToken() },
       });
-      console.log(response.data);
+
       if (response.data._id) {
         response.data.name = response.data.name.toUpperCase();
         setContacto(response.data);
@@ -105,7 +105,7 @@ const DetalleContacto = (props) => {
           <p>{`Está seguro de eliminar a ${contacto.name} de los contactos.`}</p>
         </Modal>
         <Skeleton loading={loading} active>
-          <Card title={nombreCompleto} bordered={false} style={{ width: 300 }}>
+          <Card title={nombreCompleto} bordered={false} style={{ width: 450 }}>
             {contacto.address ? <p>Dirección: {contacto.address}</p> : null}
             {contacto.birthdate ? (
               <p>
