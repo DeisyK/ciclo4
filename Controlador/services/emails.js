@@ -18,7 +18,7 @@ const transporter = nodemailer.createTransport({
 });
 
 exports.register = async (user, password) => {
-  const { nombre, email } = user;
+  const { name, email } = user;
 
   const contentHTML = `
   <!DOCTYPE html>
@@ -38,7 +38,7 @@ exports.register = async (user, password) => {
   />
   </head>
   <body bgcolor="#fff">
-  <h1>Hola ${nombre},</h1>
+  <h1>Hola ${name},</h1>
   <h3>Gracias por usar BWN ya puedes empezar a usar tu cuenta usando tu email y la contraseña: ${password}</h3>
   </body>
   </html>
@@ -63,6 +63,7 @@ exports.register = async (user, password) => {
 };
 
 exports.recoveryPassword = async (user, password) => {
+  const { name, email } = user;
   const contentHTML = `
   <!DOCTYPE html>
   <html lang="en">
@@ -81,7 +82,7 @@ exports.recoveryPassword = async (user, password) => {
   />
   </head>
   <body bgcolor="#fff">
-  <h1>Hola ${user.nombre},</h1>
+  <h1>Hola ${name},</h1>
   <h3>Tu nueva contraseña es: ${password}</h3>
   </body>
   </html>
@@ -90,7 +91,7 @@ exports.recoveryPassword = async (user, password) => {
   /*DEFINE DESDE DONDE SE ENVIARÁ EL MAIL Y HACIA DONDE, TAMBIÉN PONE EL CUERPO DEL MAIL PERVIAMENTE INSTANCIADO */
   const mailOptions = {
     from: "'cambio-contraseña-noreply' <bwn.notifications@gmail.com>",
-    to: user.email,
+    to: email,
     subject: "Recuperacion de contraseña",
     html: contentHTML,
   };
