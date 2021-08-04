@@ -84,7 +84,7 @@ const Registro = (props) => {
     setVisible(false);
   };
   const onFinishFailed = (errorInfo) => {
-    setError("Error: debe ingresar un email.");
+    setError("Error: debe ingresar un email valido.");
     setTimeout(() => setError(undefined), 5000);
   };
   const edit = () => {

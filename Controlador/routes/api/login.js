@@ -4,8 +4,8 @@ const { verifyUsuario } = require("../../middlewares/auth/auth");
 const validation = require("../../middlewares/validation");
 
 router.get("/get-usuario", loginController.usuario);
-router.post("/into", loginController.login);
-router.post("/register", loginController.register);
+router.post("/into", validation.login, loginController.login);
+router.post("/register", validation.register, loginController.register);
 router.patch("/recovery", loginController.recovery);
 router.patch("/change/password", loginController.change);
 router.patch("/:id/edit", verifyUsuario, loginController.edit);

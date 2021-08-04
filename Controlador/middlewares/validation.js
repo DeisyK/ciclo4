@@ -20,9 +20,6 @@ const validation = {
       .bail()
       .isEmail()
       .withMessage("Ingresa un email valido"),
-    body("numero")
-      .notEmpty()
-      .withMessage("Tiene que ingresar un número de telefono"),
   ],
   recovery: [
     body("email")
