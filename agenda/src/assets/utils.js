@@ -1,3 +1,3 @@
-const api = "http://localhost:3030/api/";
+const api = "https://bwn-backend.herokuapp.com/api/";
 
 export default api;
