@@ -67,7 +67,7 @@ exports.register = async (req, res, next) => {
           password: bcrypt.hashSync(password, salt),
         })
         .save();
-      console.log(register);
+
       const mailOk = await sendEmails.register(register, password);
 
       mailOk
