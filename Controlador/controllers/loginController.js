@@ -27,6 +27,7 @@ exports.login = async (req, res, next) => {
     if (resultValidation.errors.length > 0) {
       res.send({ errors: resultValidation.mapped() });
     }
+    
 
     const register = await db.User.findOne({ email: req.body.email });
     if (register) {
